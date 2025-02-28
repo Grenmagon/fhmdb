@@ -3,6 +3,7 @@ package at.ac.fhcampuswien.fhmdb.models;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -87,5 +88,26 @@ class MovieTest
         Movie m = new Movie("Avatar", "Film about the Aliens and not the bad one", genreList );
 
         assertEquals(0,movies.get(0).compareTo(m));
+    }
+
+    @Test
+    void getGenreStringArraySize()
+    {
+        String[] actual = Movie.getGenreStringArray();
+        Movie.Genre[] expected = Movie.Genre.values();
+        assertEquals(actual.length,expected.length);
+    }
+
+    @Test
+    void getGenreStringCompareFirst() {
+        String[] actual = Movie.getGenreStringArray();
+        Movie.Genre[] expected = Movie.Genre.values();
+        assertEquals(actual[0],expected[0].name());
+    }
+    @Test
+    void getGenreStringCompareLast() {
+        String[] actual = Movie.getGenreStringArray();
+        Movie.Genre[] expected = Movie.Genre.values();
+        assertEquals(actual[actual.length-1],expected[expected.length-1].name());
     }
 }

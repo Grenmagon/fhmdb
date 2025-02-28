@@ -69,6 +69,18 @@ public class Movie implements Comparable<Movie>{
         return genresString;
     }
 
+    static public String[] getGenreStringArray(){
+        /*
+        Arrays.stream =converts the array into a stream so we can perform operations on it
+        .map(Enum::name)=
+        .map-->transforms each element in the stream
+        Enum::name is a method reference that calls the name() method on each enum constant
+        he name() method returns the string representation of the enum constant
+        .toArray(String[]::new) --> Converts the processed stream back into a String[] array, create a new String array
+         */
+        return Arrays.stream(Movie.Genre.values()).map(Movie.Genre::name).toArray(String[]::new);
+    }
+
 
     public static List<Movie> initializeMovies(){
         List<Movie> movies = new ArrayList<>();
@@ -82,6 +94,11 @@ public class Movie implements Comparable<Movie>{
         movies.add(new Movie("Star Wars Episode 4", "Luke goes on an Adventure!", genreList));
         Collections.addAll(genreList = new ArrayList<Genre>(),Genre.COMEDY, Genre.DRAMA, Genre.BIOGRAPHY);
         movies.add(new Movie("The Life of Brian", "Classic film from Monty Python", genreList));
+        //added some cases for filter options testing
+        Collections.addAll(genreList = new ArrayList<Genre>(),Genre.FAMILY, Genre.DRAMA, Genre.ANIMATION,Genre.COMEDY);
+        movies.add(new Movie("Finding Nemo", "movie about an lost fish namend nemo, great family film", genreList ));
+        Collections.addAll(genreList = new ArrayList<Genre>(),Genre.FAMILY, Genre.DRAMA, Genre.ANIMATION,Genre.COMEDY);
+        movies.add(new Movie("Finding Dori", "movie about another lost fish namend dori, great family film", genreList ));
 
         return movies;
     }

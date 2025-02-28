@@ -20,6 +20,7 @@ public class MovieCell extends ListCell<Movie> {
 
         if (empty || movie == null) {
             setText(null);
+            setGraphic(null);  //Damit die leeren Elemente nicht mehr angezeigt werden
         } else {
             this.getStyleClass().add("movie-cell");
             title.setText(movie.getTitle());

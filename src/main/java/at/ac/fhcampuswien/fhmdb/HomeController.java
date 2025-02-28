@@ -12,9 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.util.Collections;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class HomeController implements Initializable {
     @FXML
@@ -36,6 +34,7 @@ public class HomeController implements Initializable {
 
     public void setObservableMovies(ObservableList<Movie> observableMovies) {
         this.observableMovies = observableMovies;
+
     }
 
      private ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
@@ -50,9 +49,11 @@ public class HomeController implements Initializable {
 
         // TODO add genre filter items with genreComboBox.getItems().addAll(...)
         genreComboBox.setPromptText("Filter by Genre");
+        genreComboBox.getItems().addAll(Movie.getGenreStringArray());
 
         // TODO add event handlers to buttons and call the regarding methods
         // either set event handlers in the fxml file (onAction) or add them here
+        searchBtn.setOnAction(actionEvent -> filmFilter((String) genreComboBox.getValue(), searchField.getCharacters().toString()));
 
         // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
@@ -74,6 +75,40 @@ public class HomeController implements Initializable {
      }
     public void sortDesc (){
         observableMovies.sort(Collections.reverseOrder());
+    }
+
+
+    public void filmFilter(String genre, String filter){ // gehört eigentlich private, damit wir Unittests machen können auf public gesetzt
+        //String genre = (String) genreComboBox.getValue();//welches Genre haben wir gesetzt?--> für Unit Testing nach oben gesetzt
+        boolean searchGenre = true;
+        Movie.Genre g = Movie.Genre.Reset;
+        if (genre != null)
+            g = Movie.Genre.valueOf(genre); //String von Genre in Enum umwandeln
+        else
+            searchGenre = false;
+        //String filter = searchField.getCharacters().toString().toLowerCase();--> für Unit Testing nach oben gesetzt
+        filter = filter.toLowerCase();
+        System.out.println(filter);
+
+        //observableMovies.removeAll();
+        List<Movie> filtered = new ArrayList<>();
+
+        for(int i = 0; i< allMovies.size(); i++){
+            boolean check = true;
+            Movie movie = allMovies.get(i);
+            if(searchGenre && !movie.getGenres().contains(g))
+                check = false;
+
+            if(!movie.getTitle().toLowerCase().contains(filter) && !movie.getDescription().toLowerCase().contains(filter))
+                check = false;
+
+            if(check){
+                filtered.add(movie);
+            }
+        }
+
+        observableMovies.setAll(filtered); // funktioniert besser als removen und alle einzeln hinzufügen
+
     }
 
 
