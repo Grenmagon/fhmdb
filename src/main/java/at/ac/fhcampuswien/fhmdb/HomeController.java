@@ -122,5 +122,9 @@ public class HomeController implements Initializable {
         observableMovies.setAll(allMovies);  // Komplette Film-Liste wiederherstellen
     }
 
+    public ObservableList<Movie> getObservableMovies() {
+        return observableMovies;
+    }
+
 
 }
