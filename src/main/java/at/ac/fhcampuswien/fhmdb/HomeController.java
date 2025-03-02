@@ -30,6 +30,9 @@ public class HomeController implements Initializable {
     @FXML
     public JFXButton sortBtn;
 
+    @FXML
+    public JFXButton resetBtn;
+
     public List<Movie> allMovies = Movie.initializeMovies();
 
     public void setObservableMovies(ObservableList<Movie> observableMovies) {
@@ -68,6 +71,7 @@ public class HomeController implements Initializable {
             }
         });
 
+        resetBtn.setOnAction(actionEvent -> onResetClicked());
 
     }
      public void sortAsc (){
@@ -109,6 +113,13 @@ public class HomeController implements Initializable {
 
         observableMovies.setAll(filtered); // funktioniert besser als removen und alle einzeln hinzufügen
 
+    }
+
+    @FXML
+    public void onResetClicked() {
+        searchField.clear();  // Suchfeld leeren
+        genreComboBox.getSelectionModel().clearSelection();  // Genre-Filter zurücksetzen
+        observableMovies.setAll(allMovies);  // Komplette Film-Liste wiederherstellen
     }
 
 

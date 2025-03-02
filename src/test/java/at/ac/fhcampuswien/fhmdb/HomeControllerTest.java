@@ -57,7 +57,7 @@ public class HomeControllerTest {
 
     //Tests ob der Genre-Filter richtig angewandt wird
     @Test
-    void filmFilter_Action(){
+    void filmFilter_Action() {
         observableMovies.setAll(Movie.initializeMovies());
         homeController.filmFilter(Movie.Genre.ACTION.name(), "");
 
@@ -69,7 +69,7 @@ public class HomeControllerTest {
     }
 
     @Test
-    void filmFilter_ScienceFiction(){
+    void filmFilter_ScienceFiction() {
         observableMovies.setAll(Movie.initializeMovies());
         homeController.filmFilter(Movie.Genre.SCIENCE_FICTION.name(), "");
 
@@ -80,7 +80,7 @@ public class HomeControllerTest {
     }
 
     @Test
-    void filmFilter_Comedy(){
+    void filmFilter_Comedy() {
         observableMovies.setAll(Movie.initializeMovies());
         homeController.filmFilter(Movie.Genre.COMEDY.name(), "");
 
@@ -92,7 +92,7 @@ public class HomeControllerTest {
 
     //Tests ob der Such-Filter richtig angewandt wird
     @Test
-    void filmFilter_film(){
+    void filmFilter_film() {
         observableMovies.setAll(Movie.initializeMovies());
         homeController.filmFilter(null, "film");
 
@@ -102,8 +102,9 @@ public class HomeControllerTest {
         assertEquals("Finding Dori", observableMovies.get(3).getTitle());
 
     }
+
     @Test
-    void filmFilter_movie(){
+    void filmFilter_movie() {
         observableMovies.setAll(Movie.initializeMovies());
         homeController.filmFilter(null, "movie");
 
@@ -116,7 +117,7 @@ public class HomeControllerTest {
     //Tests ob der Such-Filter+Genre-Filter richtig angewandt wird
 
     @Test
-    void filmFilter_film_animation(){
+    void filmFilter_film_animation() {
         observableMovies.setAll(Movie.initializeMovies());
         homeController.filmFilter(Movie.Genre.ANIMATION.name(), "film");
 
@@ -126,7 +127,7 @@ public class HomeControllerTest {
     }
 
     @Test
-    void filmFilter_an_action(){
+    void filmFilter_an_action() {
         observableMovies.setAll(Movie.initializeMovies());
         homeController.filmFilter(Movie.Genre.ACTION.name(), "an");
 
