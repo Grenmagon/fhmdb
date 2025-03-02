@@ -92,7 +92,7 @@ public class HomeController implements Initializable {
             searchGenre = false;
         //String filter = searchField.getCharacters().toString().toLowerCase();--> für Unit Testing nach oben gesetzt
         filter = filter.toLowerCase();
-        System.out.println(filter);
+        //System.out.println(filter);
 
         //observableMovies.removeAll();
         List<Movie> filtered = new ArrayList<>();
