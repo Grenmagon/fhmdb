@@ -85,7 +85,7 @@ public class HomeController implements Initializable {
     public void filmFilter(String genre, String filter){ // gehört eigentlich private, damit wir Unittests machen können auf public gesetzt
         //String genre = (String) genreComboBox.getValue();//welches Genre haben wir gesetzt?--> für Unit Testing nach oben gesetzt
         boolean searchGenre = true;
-        Movie.Genre g = Movie.Genre.Reset;
+        Movie.Genre g = Movie.Genre.ACTION;
         if (genre != null)
             g = Movie.Genre.valueOf(genre); //String von Genre in Enum umwandeln
         else

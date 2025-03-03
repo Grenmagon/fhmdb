@@ -12,7 +12,6 @@ public class Movie implements Comparable<Movie>{
 
     public enum Genre
     {
-        Reset,
         ACTION,
         ADVENTURE,
         ANIMATION,
