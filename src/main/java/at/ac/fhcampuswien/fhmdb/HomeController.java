@@ -45,7 +45,9 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        observableMovies.addAll(Movie.allMoviesAPI());         // add dummy data to observable list
+        List<Movie> initList = Movie.allMoviesAPI();
+        if (initList != null)
+            observableMovies.addAll(initList);         // add dummy data to observable list
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
@@ -92,7 +94,8 @@ public class HomeController implements Initializable {
         if (genreString != null && !genreString.isEmpty())
             genre = Movie.Genre.valueOf(genreString); //String von Genre in Enum umwandeln
         String ergebnisJson = MovieAPI.getMoviesFilter(filter, genre, 0,0);
-        observableMovies.setAll(Movie.getMoviesFromJson(ergebnisJson));
+        if (!ergebnisJson.equals(MovieAPI.ERROR))
+            observableMovies.setAll(Movie.getMoviesFromJson(ergebnisJson));
 
     }
 

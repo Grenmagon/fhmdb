@@ -198,6 +198,8 @@ public class Movie implements Comparable<Movie>{
 
     public static List<Movie> getMoviesFromJson(String json)
     {
+        if (json.equals(MovieAPI.ERROR))
+            return null;
         Gson gson = new Gson();
         Type movieListType = new TypeToken<List<Movie>>() {}.getType();
         List<Movie> movies = gson.fromJson(json, movieListType);
