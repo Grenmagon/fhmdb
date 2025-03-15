@@ -1,5 +1,9 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.*;
 
 public class Movie implements Comparable<Movie>{
@@ -33,11 +37,19 @@ public class Movie implements Comparable<Movie>{
         WAR,
         WESTERN
     }
-
+    private String uid;
     private String title;
     private String description;
     private List<Genre> genres;
-    // TODO add more properties here
+    private int releaseYear;
+    private String imgUrl;
+    private int lengthInMinutes;
+    private List<String> director;
+    private List<String> writer;
+    private List<String> cast;
+    private double rating;
+
+    // DONE add more properties here
 
     public Movie(String title, String description, List<Genre> genres) {
         this.title = title;
@@ -45,15 +57,110 @@ public class Movie implements Comparable<Movie>{
         this.genres = genres;
     }
 
+    public String getUid()
+    {
+        return uid;
+    }
+
+    public void setUid(String uid)
+    {
+        this.uid = uid;
+    }
+
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
     }
 
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
     public List<Genre> getGenres() {return genres;}
+
+    public void setGenres(List<Genre> genres)
+    {
+        this.genres = genres;
+    }
+
+    public String getImgUrl()
+    {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl)
+    {
+        this.imgUrl = imgUrl;
+    }
+
+    public int getReleaseYear()
+    {
+        return releaseYear;
+    }
+
+    public void setReleaseYear(int releaseYear)
+    {
+        this.releaseYear = releaseYear;
+    }
+
+    public int getLengthInMinutes()
+    {
+        return lengthInMinutes;
+    }
+
+    public void setLengthInMinutes(int lengthInMinutes)
+    {
+        this.lengthInMinutes = lengthInMinutes;
+    }
+
+    public List<String> getDirector()
+    {
+        return director;
+    }
+
+    public void setDirector(List<String> director)
+    {
+        this.director = director;
+    }
+
+    public List<String> getWriter()
+    {
+        return writer;
+    }
+
+    public void setWriter(List<String> writer)
+    {
+        this.writer = writer;
+    }
+
+    public List<String> getCast()
+    {
+        return cast;
+    }
+
+    public void setCast(List<String> cast)
+    {
+        this.cast = cast;
+    }
+
+    public double getRating()
+    {
+        return rating;
+    }
+
+    public void setRating(double rating)
+    {
+        this.rating = rating;
+    }
 
     public String getGenresString()
     {
@@ -81,24 +188,24 @@ public class Movie implements Comparable<Movie>{
     }
 
 
-    public static List<Movie> initializeMovies(){
-        List<Movie> movies = new ArrayList<>();
-        // TODO add some dummy data here
-        List<Genre> genreList;
-        Collections.addAll(genreList = new ArrayList<Genre>(),Genre.SCIENCE_FICTION, Genre.ACTION);
-        movies.add(new Movie("Avatar", "Film about the Aliens and not the bad one", genreList ));
-        Collections.addAll(genreList = new ArrayList<Genre>(),Genre.SCIENCE_FICTION, Genre.ACTION);
-        movies.add(new Movie("Star Wars Episode 1", "There is Podracing!!", genreList));
-        Collections.addAll(genreList = new ArrayList<Genre>(),Genre.SCIENCE_FICTION, Genre.ACTION);
-        movies.add(new Movie("Star Wars Episode 4", "Luke goes on an Adventure!", genreList));
-        Collections.addAll(genreList = new ArrayList<Genre>(),Genre.COMEDY, Genre.DRAMA, Genre.BIOGRAPHY);
-        movies.add(new Movie("The Life of Brian", "Classic film from Monty Python", genreList));
-        //added some cases for filter options testing
-        Collections.addAll(genreList = new ArrayList<Genre>(),Genre.FAMILY, Genre.DRAMA, Genre.ANIMATION,Genre.COMEDY);
-        movies.add(new Movie("Finding Nemo", "movie about an lost fish namend nemo, great family film", genreList ));
-        Collections.addAll(genreList = new ArrayList<Genre>(),Genre.FAMILY, Genre.DRAMA, Genre.ANIMATION,Genre.COMEDY);
-        movies.add(new Movie("Finding Dori", "movie about another lost fish namend dori, great family film", genreList ));
+    public static List<Movie> allMoviesAPI(){
 
+        String json = MovieAPI.getMoviesFilter(null, null, 0, 0);
+        //System.out.println(json);
+        return  getMoviesFromJson(json);
+    }
+
+
+    public static List<Movie> getMoviesFromJson(String json)
+    {
+        Gson gson = new Gson();
+        Type movieListType = new TypeToken<List<Movie>>() {}.getType();
+        List<Movie> movies = gson.fromJson(json, movieListType);
+        /*
+        for (Movie m: movies)
+            System.out.println(m.title);
+         */
         return movies;
     }
+
 }
