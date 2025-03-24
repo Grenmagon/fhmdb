@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,60 +60,45 @@ public class HomeControllerTest {
     /*Start Kathis Tests: */
 
     //Tests ob der Genre-Filter richtig angewandt wird
+
     @Test
-    void filmFilter_Action() {
-        observableMovies.setAll(Movie.initializeMovies());
-        homeController.filmFilter(Movie.Genre.ACTION.name(), "");
-
-        assertEquals("Avatar", observableMovies.get(0).getTitle());
-        assertEquals("Star Wars Episode 1", observableMovies.get(1).getTitle());
-        assertEquals("Star Wars Episode 4", observableMovies.get(2).getTitle());
-
+    void filmFilterAPI_genre_Action()
+    {
+        homeController.filmFilterAPI("ACTION",null);
+        for(Movie m : observableMovies) {
+            assertTrue(m.getGenres().contains(Movie.Genre.ACTION));
+        }
 
     }
 
     @Test
-    void filmFilter_ScienceFiction() {
-        observableMovies.setAll(Movie.initializeMovies());
-        homeController.filmFilter(Movie.Genre.SCIENCE_FICTION.name(), "");
-
-        assertEquals("Avatar", observableMovies.get(0).getTitle());
-        assertEquals("Star Wars Episode 1", observableMovies.get(1).getTitle());
-        assertEquals("Star Wars Episode 4", observableMovies.get(2).getTitle());
-
-    }
-
-    @Test
-    void filmFilter_Comedy() {
-        observableMovies.setAll(Movie.initializeMovies());
-        homeController.filmFilter(Movie.Genre.COMEDY.name(), "");
-
-        assertEquals("The Life of Brian", observableMovies.get(0).getTitle());
-        assertEquals("Finding Nemo", observableMovies.get(1).getTitle());
-        assertEquals("Finding Dori", observableMovies.get(2).getTitle());
+    void filmFilterAPI_genre_Horror()
+    {
+        homeController.filmFilterAPI("HORROR",null);
+        for(Movie m : observableMovies) {
+            assertTrue(m.getGenres().contains(Movie.Genre.HORROR));
+        }
 
     }
 
     //Tests ob der Such-Filter richtig angewandt wird
     @Test
-    void filmFilter_film() {
-        observableMovies.setAll(Movie.initializeMovies());
-        homeController.filmFilter(null, "film");
+    void filmFilterAPI_genre_COMEDIE()
+    {
 
-        assertEquals("Avatar", observableMovies.get(0).getTitle());
-        assertEquals("The Life of Brian", observableMovies.get(1).getTitle());
-        assertEquals("Finding Nemo", observableMovies.get(2).getTitle());
-        assertEquals("Finding Dori", observableMovies.get(3).getTitle());
+        assertThrows(IllegalArgumentException.class, () -> {
+            homeController.filmFilterAPI("COMEDIE", null);
+        });
 
     }
 
     @Test
-    void filmFilter_movie() {
-        observableMovies.setAll(Movie.initializeMovies());
-        homeController.filmFilter(null, "movie");
-
-        assertEquals("Finding Nemo", observableMovies.get(0).getTitle());
-        assertEquals("Finding Dori", observableMovies.get(1).getTitle());
+    void filmFilterAPI_filter_god()
+    {
+        homeController.filmFilterAPI(null,"god");
+        for(Movie m : observableMovies) {
+            assertTrue(m.getTitle().toLowerCase().contains("god"));
+        }
 
     }
 
@@ -120,22 +106,22 @@ public class HomeControllerTest {
     //Tests ob der Such-Filter+Genre-Filter richtig angewandt wird
 
     @Test
-    void filmFilter_film_animation() {
-        observableMovies.setAll(Movie.initializeMovies());
-        homeController.filmFilter(Movie.Genre.ANIMATION.name(), "film");
-
-        assertEquals("Finding Nemo", observableMovies.get(0).getTitle());
-        assertEquals("Finding Dori", observableMovies.get(1).getTitle());
+    void filmFilterAPI_filter_GOd()
+    {
+        homeController.filmFilterAPI(null,"GOd");
+        for(Movie m : observableMovies) {
+            assertTrue(m.getTitle().toLowerCase().contains("god"));
+        }
 
     }
 
     @Test
-    void filmFilter_an_action() {
-        observableMovies.setAll(Movie.initializeMovies());
-        homeController.filmFilter(Movie.Genre.ACTION.name(), "an");
-
-        assertEquals("Avatar", observableMovies.get(0).getTitle());
-        assertEquals("Star Wars Episode 4", observableMovies.get(1).getTitle());
+    void filmFilterAPI_filter_genre()
+    {
+        homeController.filmFilterAPI("SCIENCE_FICTION","film");
+        for(Movie m : observableMovies) {
+            assertTrue(m.getTitle().contains("film")&& m.getGenres().contains(Movie.Genre.SCIENCE_FICTION) );
+        }
 
     }
 

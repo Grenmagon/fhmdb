@@ -88,16 +88,8 @@ public class Movie implements Comparable<Movie>{
     private String description;
     private List<Genre> genres;
 
-    public Integer getReleaseYear() {
-        return releaseYear;
-    }
-
-    public Double getRating() {
-        return rating;
-    }
-
-    private Integer releaseYear;
-    private Double rating;
+    //private Integer releaseYear;
+    //private Double rating;
     // TODO add more properties here
     private int releaseYear;
     private String imgUrl;
@@ -144,9 +136,6 @@ public class Movie implements Comparable<Movie>{
     }
 
     public List<Genre> getGenres() {return genres;}
-    public List<Genre> getGenres() {
-        return genres;
-    }
 
     public void setGenres(List<Genre> genres)
     {
@@ -225,7 +214,6 @@ public class Movie implements Comparable<Movie>{
 
     public String getGenresString()
     {
-    public String getGenresString() {
         String genresString = "";
         for (Genre g: genres)
         {
@@ -263,24 +251,6 @@ public class Movie implements Comparable<Movie>{
         //System.out.println(json);
         return  getMoviesFromJson(json);
     }
-    public static List<Movie> initializeMovies() {
-        List<Movie> movies = new ArrayList<>();
-        // TODO add some dummy data here
-        List<Genre> genreList;
-        Collections.addAll(genreList = new ArrayList<Genre>(), Genre.SCIENCE_FICTION, Genre.ACTION);
-        movies.add(new Movie("Avatar", "Film about the Aliens and not the bad one", genreList));
-        Collections.addAll(genreList = new ArrayList<Genre>(), Genre.SCIENCE_FICTION, Genre.ACTION);
-        movies.add(new Movie("Star Wars Episode 1", "There is Podracing!!", genreList));
-        Collections.addAll(genreList = new ArrayList<Genre>(), Genre.SCIENCE_FICTION, Genre.ACTION);
-        movies.add(new Movie("Star Wars Episode 4", "Luke goes on an Adventure!", genreList));
-        Collections.addAll(genreList = new ArrayList<Genre>(), Genre.COMEDY, Genre.DRAMA, Genre.BIOGRAPHY);
-        movies.add(new Movie("The Life of Brian", "Classic film from Monty Python", genreList));
-        //added some cases for filter options testing
-        Collections.addAll(genreList = new ArrayList<Genre>(), Genre.FAMILY, Genre.DRAMA, Genre.ANIMATION, Genre.COMEDY);
-        movies.add(new Movie("Finding Nemo", "movie about an lost fish namend nemo, great family film", genreList));
-        Collections.addAll(genreList = new ArrayList<Genre>(), Genre.FAMILY, Genre.DRAMA, Genre.ANIMATION, Genre.COMEDY);
-        movies.add(new Movie("Finding Dori", "movie about another lost fish namend dori, great family film", genreList));
-
 
     public static List<Movie> getMoviesFromJson(String json)
     {

@@ -76,17 +76,16 @@ public class HomeController implements Initializable {
         // either set event handlers in the fxml file (onAction) or add them here
         searchBtn.setOnAction(actionEvent -> filmFilterAPI((String) genreComboBox.getValue(), searchField.getCharacters().toString())); // TODO: releaseYear und ratingFrom hinzufügen
 
-
+        /*
         searchBtn.setOnAction(actionEvent -> filmFilter((String) genreComboBox.getValue(),
                                                                searchField.getCharacters().toString(),
                                                               (String) releaseYearComboBox.getValue(),
                                                               (Integer) ratingComboBox.getValue() ));
-
+        */
 
 
         // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
-            if(sortBtn.getText().equals("Sort (asc)")) {
                 // DONE sort observableMovies ascending
             if (sortBtn.getText().equals("Sort (asc)")) {
                 // TODO sort observableMovies ascending
@@ -122,6 +121,7 @@ public class HomeController implements Initializable {
         if (!ergebnisJson.equals(MovieAPI.ERROR))
             observableMovies.setAll(Movie.getMoviesFromJson(ergebnisJson));}
 
+    /*
     public void filmFilter(String genre, String filter, String decades, Integer rating) { // gehört eigentlich private, damit wir Unittests machen können auf public gesetzt
         //String genre = (String) genreComboBox.getValue();//welches Genre haben wir gesetzt?--> für Unit Testing nach oben gesetzt
         boolean searchGenre = true;
@@ -171,7 +171,7 @@ public class HomeController implements Initializable {
 
         }
     }
-
+    */
     @FXML
     public void onResetClicked() {
         searchField.clear();  // Suchfeld leeren
