@@ -1,3 +1,4 @@
+//commit
 package at.ac.fhcampuswien.fhmdb.models;
 
 import okhttp3.HttpUrl;
@@ -6,14 +7,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 
 
 public class MovieAPI
 {
     static final private String MOVIE_URL = "https://prog2.fh-campuswien.ac.at/movies";
-    static public OkHttpClient CLIENT = new OkHttpClient();
-    static public String ERROR = "Error";
+    static private final OkHttpClient CLIENT = new OkHttpClient();
 
     /*
     Returns a JSON-String of the Movies, acording to the filter
@@ -38,6 +37,7 @@ public class MovieAPI
             urlBuilder.addQueryParameter("ratingFrom", ratingFrom + "");
 
         String url = urlBuilder.build().toString();
+        System.out.println(url);
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("User-Agent", "http.agent") //without this, you are not permited to acces the server
@@ -46,26 +46,11 @@ public class MovieAPI
         try
         {
             Response response = CLIENT.newCall(request).execute();
-            if (response.body() != null)
-            {
-                String resString = response.body().string();
-                if (resString.isEmpty())
-                {
-                    System.out.println("Empty Response Error!");
-                    return ERROR;
-                }
-                return resString;
-            }
-            else
-            {
-                System.out.println("Null Response Error!");
-                return ERROR;
-            }
+            return response.body() != null ? response.body().string() : "";
         }
         catch (IOException e)
         {
-            System.out.println("Network Error!");
-            return ERROR;
+            throw new RuntimeException(e);
         }
     }
 
