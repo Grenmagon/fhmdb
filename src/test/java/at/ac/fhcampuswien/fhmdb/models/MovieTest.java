@@ -10,10 +10,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
-
 class MovieTest
 {
+
     @Test
     void compareTo_Bigger()
     {
@@ -79,6 +78,17 @@ class MovieTest
         Collections.addAll(genreList = new ArrayList<Movie.Genre>(), Movie.Genre.SCIENCE_FICTION, Movie.Genre.ACTION);
         Movie m = new Movie("Avatar", "Film about the Aliens and not the bad one", genreList );
         assertEquals("SCIENCE_FICTION, ACTION", m.getGenresString());
+    }
+
+    @Test
+    void initializeMovies()
+    {
+        List<Movie> movies = Movie.initializeMovies();
+        List<Movie.Genre> genreList;
+        Collections.addAll(genreList = new ArrayList<Movie.Genre>(), Movie.Genre.SCIENCE_FICTION, Movie.Genre.ACTION);
+        Movie m = new Movie("Avatar", "Film about the Aliens and not the bad one", genreList );
+
+        assertEquals(0,movies.get(0).compareTo(m));
     }
 
     @Test
