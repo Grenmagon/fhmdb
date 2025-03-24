@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.models.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -39,7 +40,7 @@ public class HomeController implements Initializable {
     @FXML
     public JFXButton resetBtn;
 
-    public List<Movie> allMovies = Movie.initializeMovies();
+
 
     public void setObservableMovies(ObservableList<Movie> observableMovies) {
         this.observableMovies = observableMovies;
@@ -50,16 +51,19 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        observableMovies.addAll(allMovies);         // add dummy data to observable list
+        List<Movie> initList = Movie.allMoviesAPI();
+        if (initList != null)
+            observableMovies.addAll(initList);         // add dummy data to observable list
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
         movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
 
-        // TODO add genre filter items with genreComboBox.getItems().addAll(...)
+        // DONE add genre filter items with genreComboBox.getItems().addAll(...)
         genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().addAll(Movie.getGenreStringArray());
 
+        // DONE add event handlers to buttons and call the regarding methods
         releaseYearComboBox.setPromptText("Filter by Release Year");
         releaseYearComboBox.getItems().addAll(Movie.getDecadesStringArray());
 
@@ -70,6 +74,9 @@ public class HomeController implements Initializable {
 
         // TODO add event handlers to buttons and call the regarding methods
         // either set event handlers in the fxml file (onAction) or add them here
+        searchBtn.setOnAction(actionEvent -> filmFilterAPI((String) genreComboBox.getValue(), searchField.getCharacters().toString())); // TODO: releaseYear und ratingFrom hinzufügen
+
+
         searchBtn.setOnAction(actionEvent -> filmFilter((String) genreComboBox.getValue(),
                                                                searchField.getCharacters().toString(),
                                                               (String) releaseYearComboBox.getValue(),
@@ -79,12 +86,14 @@ public class HomeController implements Initializable {
 
         // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
+            if(sortBtn.getText().equals("Sort (asc)")) {
+                // DONE sort observableMovies ascending
             if (sortBtn.getText().equals("Sort (asc)")) {
                 // TODO sort observableMovies ascending
                 sortDesc();
                 sortBtn.setText("Sort (desc)");
             } else {
-                // TODO sort observableMovies descending
+                // DONE sort observableMovies descending
                 sortAsc();
                 sortBtn.setText("Sort (asc)");
             }
@@ -103,33 +112,15 @@ public class HomeController implements Initializable {
     }
 
 
-    /*public void filmFilter(String genre, String filter) { // gehört eigentlich private, damit wir Unittests machen können auf public gesetzt
-        //String genre = (String) genreComboBox.getValue();//welches Genre haben wir gesetzt?--> für Unit Testing nach oben gesetzt
-        boolean searchGenre = true;
-        Movie.Genre g = Movie.Genre.ACTION;
-        if (genre != null)
-            g = Movie.Genre.valueOf(genre); //String von Genre in Enum umwandeln
-        else
-            searchGenre = false;
-        //String filter = searchField.getCharacters().toString().toLowerCase();--> für Unit Testing nach oben gesetzt
-        filter = filter.toLowerCase();
-        //System.out.println(filter);
 
-        //observableMovies.removeAll();
-        List<Movie> filtered = new ArrayList<>();
-
-        for (int i = 0; i < allMovies.size(); i++) {
-            boolean check = true;
-            Movie movie = allMovies.get(i);
-            if (searchGenre && !movie.getGenres().contains(g))
-                check = false;
-
-            if (!movie.getTitle().toLowerCase().contains(filter) && !movie.getDescription().toLowerCase().contains(filter))
-                check = false;
-
-            if (check) {
-                filtered.add(movie);
-            }*/
+    public void filmFilterAPI(String genreString, String filter) {  // TODO: releaseYear und ratingFrom hinzufügen
+        //filter = filter.toLowerCase();
+        Movie.Genre genre = null;
+        if (genreString != null && !genreString.isEmpty())
+            genre = Movie.Genre.valueOf(genreString); //String von Genre in Enum umwandeln
+        String ergebnisJson = MovieAPI.getMoviesFilter(filter, genre, 0,0);
+        if (!ergebnisJson.equals(MovieAPI.ERROR))
+            observableMovies.setAll(Movie.getMoviesFromJson(ergebnisJson));}
 
     public void filmFilter(String genre, String filter, String decades, Integer rating) { // gehört eigentlich private, damit wir Unittests machen können auf public gesetzt
         //String genre = (String) genreComboBox.getValue();//welches Genre haben wir gesetzt?--> für Unit Testing nach oben gesetzt
@@ -170,6 +161,7 @@ public class HomeController implements Initializable {
             }
 
 
+    }
             if (check) {
                 filtered.add(movie);
             }
@@ -184,7 +176,7 @@ public class HomeController implements Initializable {
     public void onResetClicked() {
         searchField.clear();  // Suchfeld leeren
         genreComboBox.getSelectionModel().clearSelection();  // Genre-Filter zurücksetzen
-        observableMovies.setAll(allMovies);  // Komplette Film-Liste wiederherstellen
+        observableMovies.setAll(Movie.allMoviesAPI());  // Komplette Film-Liste wiederherstellen
     }
 
     public ObservableList<Movie> getObservableMovies() {
