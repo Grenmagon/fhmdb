@@ -7,12 +7,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 
 
 public class MovieAPI
 {
     static final private String MOVIE_URL = "https://prog2.fh-campuswien.ac.at/movies";
-    static private final OkHttpClient CLIENT = new OkHttpClient();
+    static public OkHttpClient CLIENT = new OkHttpClient();
+    static public String ERROR = "Error";
+
 
     /*
     Returns a JSON-String of the Movies, acording to the filter
@@ -37,7 +40,6 @@ public class MovieAPI
             urlBuilder.addQueryParameter("ratingFrom", ratingFrom + "");
 
         String url = urlBuilder.build().toString();
-        System.out.println(url);
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("User-Agent", "http.agent") //without this, you are not permited to acces the server
@@ -46,11 +48,26 @@ public class MovieAPI
         try
         {
             Response response = CLIENT.newCall(request).execute();
-            return response.body() != null ? response.body().string() : "";
+            if (response.body() != null)
+            {
+                String resString = response.body().string();
+                if (resString.isEmpty())
+                {
+                    System.out.println("Empty Response Error!");
+                    return ERROR;
+                }
+                return resString;
+            }
+            else
+            {
+                System.out.println("Null Response Error!");
+                return ERROR;
+            }
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e);
+            System.out.println("Network Error!");
+            return ERROR;
         }
     }
 
