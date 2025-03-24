@@ -15,7 +15,6 @@ public class MovieAPI
     static public OkHttpClient CLIENT = new OkHttpClient();
     static public String ERROR = "Error";
 
-
     /*
     Returns a JSON-String of the Movies, acording to the filter
     If a filter is not wanted, just set
