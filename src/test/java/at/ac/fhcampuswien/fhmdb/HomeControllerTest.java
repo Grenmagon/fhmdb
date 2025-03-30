@@ -64,7 +64,7 @@ public class HomeControllerTest {
     @Test
     void filmFilterAPI_genre_Action()
     {
-        homeController.filmFilterAPI("ACTION",null);
+        homeController.filmFilterAPI("ACTION",null,0, 0.00);
         for(Movie m : observableMovies) {
             assertTrue(m.getGenres().contains(Movie.Genre.ACTION));
         }
@@ -74,7 +74,7 @@ public class HomeControllerTest {
     @Test
     void filmFilterAPI_genre_Horror()
     {
-        homeController.filmFilterAPI("HORROR",null);
+        homeController.filmFilterAPI("HORROR",null,0,0.00);
         for(Movie m : observableMovies) {
             assertTrue(m.getGenres().contains(Movie.Genre.HORROR));
         }
@@ -87,7 +87,7 @@ public class HomeControllerTest {
     {
 
         assertThrows(IllegalArgumentException.class, () -> {
-            homeController.filmFilterAPI("COMEDIE", null);
+            homeController.filmFilterAPI("COMEDIE", null,0, 0.00);
         });
 
     }
@@ -95,7 +95,7 @@ public class HomeControllerTest {
     @Test
     void filmFilterAPI_filter_god()
     {
-        homeController.filmFilterAPI(null,"god");
+        homeController.filmFilterAPI(null,"god",0, 0.00);
         for(Movie m : observableMovies) {
             assertTrue(m.getTitle().toLowerCase().contains("god"));
         }
@@ -108,7 +108,7 @@ public class HomeControllerTest {
     @Test
     void filmFilterAPI_filter_GOd()
     {
-        homeController.filmFilterAPI(null,"GOd");
+        homeController.filmFilterAPI(null,"GOd",0,0.00);
         for(Movie m : observableMovies) {
             assertTrue(m.getTitle().toLowerCase().contains("god"));
         }
@@ -118,7 +118,7 @@ public class HomeControllerTest {
     @Test
     void filmFilterAPI_filter_genre()
     {
-        homeController.filmFilterAPI("SCIENCE_FICTION","film");
+        homeController.filmFilterAPI("SCIENCE_FICTION","film",0, 0.00);
         for(Movie m : observableMovies) {
             assertTrue(m.getTitle().contains("film")&& m.getGenres().contains(Movie.Genre.SCIENCE_FICTION) );
         }

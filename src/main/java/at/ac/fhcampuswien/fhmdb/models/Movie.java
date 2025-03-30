@@ -91,13 +91,13 @@ public class Movie implements Comparable<Movie>{
     //private Integer releaseYear;
     //private Double rating;
     // TODO add more properties here
-    private int releaseYear;
+    private Integer releaseYear;
     private String imgUrl;
     private int lengthInMinutes;
     private List<String> director;
     private List<String> writer;
     private List<String> cast;
-    private double rating;
+    private Double rating;
 
     // DONE add more properties here
 
