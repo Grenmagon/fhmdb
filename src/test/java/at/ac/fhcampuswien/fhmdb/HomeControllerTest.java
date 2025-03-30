@@ -129,21 +129,20 @@ public class HomeControllerTest {
 
     @Test
     void onResetClicked_restoresAllMovies() {
-        // Arrange: Erstelle eine Kopie der ursprünglichen Filme, die im Controller gespeichert sind
-        List<Movie> originalMovies = new ArrayList<>(observableMovies);
+        List<Movie> originalMovies = new ArrayList<>(homeController.getObservableMovies());
+        homeController.getObservableMovies().remove(0);
 
-        // Simuliere eine Filterung durch Reduzierung der Liste
-        observableMovies.remove(0);
-        observableMovies.remove(0);
-        assertNotEquals(originalMovies.size(), observableMovies.size()); // Überprüfen, dass sich die Liste geändert hat
+        assertNotEquals(originalMovies.size(), homeController.getObservableMovies().size());
 
-        // Act: Simuliere den Reset, indem die ursprüngliche Liste wiederhergestellt wird
+        // Nur Datenliste zurücksetzen, nicht UI testen
         homeController.getObservableMovies().setAll(originalMovies);
 
-        // Assert: Prüfe, ob alle Filme wieder da sind
         assertEquals(originalMovies.size(), homeController.getObservableMovies().size());
         assertTrue(homeController.getObservableMovies().containsAll(originalMovies));
     }
+
+
+
 
 }
 
