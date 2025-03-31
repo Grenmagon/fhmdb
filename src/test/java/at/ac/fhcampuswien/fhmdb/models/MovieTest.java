@@ -102,4 +102,58 @@ class MovieTest
         Movie.Genre[] expected = Movie.Genre.values();
         assertEquals(actual[actual.length-1],expected[expected.length-1].name());
     }
+
+    @Test
+    void getMoviesFromJson() {
+        // JSON nachbauen,simulieren
+        String json = "[\n" +
+                "{\n" +
+                "    \"id\": \"81d317b0-29e5-4846-97a6-43c07f3edf4a\",\n" +
+                "    \"title\": \"The Godfather\",\n" +
+                "    \"genres\": [\n" +
+                "      \"DRAMA\"\n" +
+                "    ],\n" +
+                "    \"releaseYear\": 1972,\n" +
+                "    \"description\": \"The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.\",\n" +
+                "    \"imgUrl\": \"https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@.V1.jpg\",\n" +
+                "    \"lengthInMinutes\": 175,\n" +
+                "    \"directors\": [\n" +
+                "      \"Francis Ford Coppola\"\n" +
+                "    ],\n" +
+                "    \"writers\": [\n" +
+                "      \"Mario Puzo\",\n" +
+                "      \"Francis Ford Coppola\"\n" +
+                "    ],\n" +
+                "    \"mainCast\": [\n" +
+                "      \"Marlon Brando\",\n" +
+                "      \"Al Pacino\",\n" +
+                "      \"James Caan\"\n" +
+                "    ],\n" +
+                "    \"rating\": 9.2\n" +
+                "  }\n" +
+                "]";
+        List<Movie> actual = Movie.getMoviesFromJson(json);
+        Movie m = new Movie("The Godfather", "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.", List.of(Movie.Genre.DRAMA));
+        m.setReleaseYear(1972);
+        m.setLengthInMinutes(175);
+        m.setRating(9.2);
+        m.setDirectors(List.of("Francis Ford Coppola"));
+        m.setWriters(List.of("Mario Puzo", "Francis Ford Coppola"));
+        m.setMainCast(List.of("Marlon Brando", "Al Pacino", "James Caan"));
+        m.setImgUrl("https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@.V1.jpg");
+        m.setId("81d317b0-29e5-4846-97a6-43c07f3edf4a");
+
+        assertEquals(m.getId(), actual.get(0).getId());
+        assertEquals(m.getTitle(), actual.get(0).getTitle());
+        assertEquals(m.getGenres(), actual.get(0).getGenres());
+        assertEquals(m.getReleaseYear(), actual.get(0).getReleaseYear());
+        assertEquals(m.getDescription(), actual.get(0).getDescription());
+        assertEquals(m.getImgUrl(), actual.get(0).getImgUrl());
+        assertEquals(m.getLengthInMinutes(), actual.get(0).getLengthInMinutes());
+        assertEquals(m.getDirectors(), actual.get(0).getDirectors());
+        assertEquals(m.getWriters(), actual.get(0).getWriters());
+        assertEquals(m.getMainCast(), actual.get(0).getMainCast());
+        assertEquals(m.getRating(), actual.get(0).getRating());
+    }
+
 }

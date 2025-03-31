@@ -37,7 +37,7 @@ public class Movie implements Comparable<Movie>{
         WAR,
         WESTERN
     }
-    private String uid;
+    private String id;
 
     public enum Rating {
         ONE(1),
@@ -68,9 +68,9 @@ public class Movie implements Comparable<Movie>{
     private Integer releaseYear;
     private String imgUrl;
     private int lengthInMinutes;
-    private List<String> director;
-    private List<String> writer;
-    private List<String> cast;
+    private List<String> directors;
+    private List<String> writers;
+    private List<String> mainCast;
     private Double rating;
 
     public Movie(String title, String description, List<Genre> genres) {
@@ -79,14 +79,14 @@ public class Movie implements Comparable<Movie>{
         this.genres = genres;
     }
 
-    public String getUid()
+    public String getId()
     {
-        return uid;
+        return id;
     }
 
-    public void setUid(String uid)
+    public void setId(String id)
     {
-        this.uid = uid;
+        this.id = id;
     }
 
     public String getTitle() {
@@ -144,34 +144,34 @@ public class Movie implements Comparable<Movie>{
         this.lengthInMinutes = lengthInMinutes;
     }
 
-    public List<String> getDirector()
+    public List<String> getDirectors()
     {
-        return director;
+        return directors;
     }
 
-    public void setDirector(List<String> director)
+    public void setDirectors(List<String> directors)
     {
-        this.director = director;
+        this.directors = directors;
     }
 
-    public List<String> getWriter()
+    public List<String> getWriters()
     {
-        return writer;
+        return writers;
     }
 
-    public void setWriter(List<String> writer)
+    public void setWriters(List<String> writers)
     {
-        this.writer = writer;
+        this.writers = writers;
     }
 
-    public List<String> getCast()
+    public List<String> getMainCast()
     {
-        return cast;
+        return mainCast;
     }
 
-    public void setCast(List<String> cast)
+    public void setMainCast(List<String> mainCast)
     {
-        this.cast = cast;
+        this.mainCast = mainCast;
     }
 
     public double getRating()

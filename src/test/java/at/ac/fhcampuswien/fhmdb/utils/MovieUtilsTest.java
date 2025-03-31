@@ -1,7 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.utils;
 
 import at.ac.fhcampuswien.fhmdb.models.Movie;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -29,13 +28,13 @@ public class MovieUtilsTest {
     @Test
     public void testGetMostPopularActor_returnsCorrectActor() {
         Movie m1 = new Movie("Film A", "", List.of(Movie.Genre.ACTION));
-        m1.setCast(List.of("Tom Hanks", "Brad Pitt"));
+        m1.setMainCast(List.of("Tom Hanks", "Brad Pitt"));
 
         Movie m2 = new Movie("Film B", "", List.of(Movie.Genre.DRAMA));
-        m2.setCast(List.of("Tom Hanks", "Natalie Portman"));
+        m2.setMainCast(List.of("Tom Hanks", "Natalie Portman"));
 
         Movie m3 = new Movie("Film C", "", List.of(Movie.Genre.THRILLER));
-        m3.setCast(List.of("Tom Hanks"));
+        m3.setMainCast(List.of("Tom Hanks"));
 
         List<Movie> movies = List.of(m1, m2, m3);
 
@@ -48,13 +47,13 @@ public class MovieUtilsTest {
     @Test
     public void testCountMoviesFrom_returnsCorrectCount() {
         Movie m1 = new Movie("Film A", "", List.of(Movie.Genre.ACTION));
-        m1.setDirector(List.of("Quentin Tarantino"));
+        m1.setDirectors(List.of("Quentin Tarantino"));
 
         Movie m2 = new Movie("Film B", "", List.of(Movie.Genre.DRAMA));
-        m2.setDirector(List.of("James Cameron"));
+        m2.setDirectors(List.of("James Cameron"));
 
         Movie m3 = new Movie("Film C", "", List.of(Movie.Genre.ACTION));
-        m3.setDirector(List.of("Quentin Tarantino"));
+        m3.setDirectors(List.of("Quentin Tarantino"));
 
         List<Movie> movies = List.of(m1, m2, m3);
 

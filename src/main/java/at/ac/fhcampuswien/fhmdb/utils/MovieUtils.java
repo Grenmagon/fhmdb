@@ -13,8 +13,8 @@ public class MovieUtils {
      */
     public static String getMostPopularActor(List<Movie> movies) {
         return movies.stream()
-                .filter(m -> m.getCast() != null)
-                .flatMap(m -> m.getCast().stream()) // Alle Schauspieler aus allen Filmen sammeln
+                .filter(m -> m.getMainCast() != null)
+                .flatMap(m -> m.getMainCast().stream()) // Alle Schauspieler aus allen Filmen sammeln
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting())) // Häufigkeit zählen
                 .entrySet().stream()
                 .max(Map.Entry.comparingByValue()) // Max. Eintrag finden
@@ -38,7 +38,7 @@ public class MovieUtils {
      */
     public static long countMoviesFrom(List<Movie> movies, String director) {
         return movies.stream()
-                .filter(m -> m.getDirector() != null && m.getDirector().contains(director))
+                .filter(m -> m.getDirectors() != null && m.getDirectors().contains(director))
                 .count();
     }
 
