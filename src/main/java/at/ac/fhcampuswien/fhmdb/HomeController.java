@@ -41,11 +41,8 @@ public class HomeController implements Initializable {
     @FXML
     public JFXButton resetBtn;
 
-
-
     public void setObservableMovies(ObservableList<Movie> observableMovies) {
         this.observableMovies = observableMovies;
-
     }
 
     private ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
@@ -66,23 +63,12 @@ public class HomeController implements Initializable {
 
         // DONE add event handlers to buttons and call the regarding methods
         releaseYearComboBox.setPromptText("Filter by Release Year");
-        releaseYearComboBox.getItems().addAll(Movie.getDecadesStringArray());
+        releaseYearComboBox.getItems().addAll(getYear());
 
 
         ratingComboBox.setPromptText("Filter by Rating");
         ratingComboBox.getItems().addAll(Movie.getRatingStringArray());
 
-/*
-        // TODO add event handlers to buttons and call the regarding methods
-        // either set event handlers in the fxml file (onAction) or add them here
-        searchBtn.setOnAction(actionEvent -> filmFilterAPI((String) genreComboBox.getValue(),
-                                                                           searchField.getCharacters().toString(),
-                                                                         (Integer) releaseYearComboBox.getValue(),
-                                                                        (Integer) ratingComboBox.getValue())); // TODO: releaseYear und rating hinzufügen
-
-
-
-*/
         searchBtn.setOnAction(actionEvent -> filmFilterAPI(
                 genreComboBox.getValue() == null ? null : genreComboBox.getValue().toString(),
                 searchField.getText(),
@@ -106,7 +92,6 @@ public class HomeController implements Initializable {
         });
 
         resetBtn.setOnAction(actionEvent -> onResetClicked());
-
     }
 
     public void sortAsc() {
@@ -117,68 +102,19 @@ public class HomeController implements Initializable {
         observableMovies.sort(Collections.reverseOrder());
     }
 
+    public String[] getYear() {
+        return observableMovies.stream().map(movie -> String.valueOf(movie.getReleaseYear())).distinct().sorted().toArray(String[]::new);
+    }
 
-
-    public void filmFilterAPI(String genreString, String filter, int releaseYear, double rating) {  // TODO: releaseYear und ratingFrom hinzufügen
-        //filter = filter.toLowerCase();
+    public void filmFilterAPI(String genreString, String filter, int releaseYear, double rating) {
         Movie.Genre genre = null;
         if (genreString != null && !genreString.isEmpty())
             genre = Movie.Genre.valueOf(genreString); //String von Genre in Enum umwandeln
         String ergebnisJson = MovieAPI.getMoviesFilter(filter, genre, releaseYear, rating);
         if (!ergebnisJson.equals(MovieAPI.ERROR))
-            observableMovies.setAll(Movie.getMoviesFromJson(ergebnisJson));}
-
-    /*
-    public void filmFilter(String genre, String filter, String decades, Integer rating) { // gehört eigentlich private, damit wir Unittests machen können auf public gesetzt
-        //String genre = (String) genreComboBox.getValue();//welches Genre haben wir gesetzt?--> für Unit Testing nach oben gesetzt
-        boolean searchGenre = true;
-        boolean searchDecades = true;
-        boolean searchRating = true;
-        Integer d = Integer.parseInt(decades);
-        Movie.Genre g = Movie.Genre.ACTION;
-        if (genre != null)
-            g = Movie.Genre.valueOf(genre); //String von Genre in Enum umwandeln
-        else
-            searchGenre = false;
-
-
-        //String filter = searchField.getCharacters().toString().toLowerCase();--> für Unit Testing nach oben gesetzt
-        filter = filter.toLowerCase();
-        //System.out.println(filter);
-
-        //observableMovies.removeAll();
-        List<Movie> filtered = new ArrayList<>();
-
-        for (Movie movie : allMovies) {
-            boolean check = true;
-
-            if (searchGenre && !movie.getGenres().contains(g))
-                check = false;
-
-            if (!movie.getTitle().toLowerCase().contains(filter) && !movie.getDescription().toLowerCase().contains(filter))
-                check = false;
-            if (searchDecades) {
-                int movieYear = movie.getReleaseYear();
-                if (movieYear < d || movieYear >= d + 10) {
-                    check = false;
-                }
-                if (searchRating && movie.getRating() < rating) {
-                    check = false;
-                }
-            }
-
-
+            observableMovies.setAll(Movie.getMoviesFromJson(ergebnisJson));
     }
-            if (check) {
-                filtered.add(movie);
-            }
 
-
-            observableMovies.setAll(filtered); // funktioniert besser als removen und alle einzeln hinzufügen
-
-        }
-    }
-    */
     @FXML
     public void onResetClicked() {
         searchField.clear();  // Suchfeld leeren

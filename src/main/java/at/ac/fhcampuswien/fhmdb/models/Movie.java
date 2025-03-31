@@ -61,36 +61,10 @@ public class Movie implements Comparable<Movie>{
         }
     }
 
-    public enum Decades {
-        YEARS40(1940),
-        YEARS50(1950),
-        YEARS60(1960),
-        YEARS70(1970),
-        YEARS80(1980),
-        YEARS90(1990),
-        YEARS00(2000),
-        YEARS10(2010),
-        YEARS20(2020);
-
-        private final int value;
-
-        public int getValue() {
-            return value;
-        }
-
-        Decades(int value) {
-            this.value = value;
-        }
-    }
-
-
     private String title;
     private String description;
     private List<Genre> genres;
 
-    //private Integer releaseYear;
-    //private Double rating;
-    // TODO add more properties here
     private Integer releaseYear;
     private String imgUrl;
     private int lengthInMinutes;
@@ -98,8 +72,6 @@ public class Movie implements Comparable<Movie>{
     private List<String> writer;
     private List<String> cast;
     private Double rating;
-
-    // DONE add more properties here
 
     public Movie(String title, String description, List<Genre> genres) {
         this.title = title;
@@ -241,14 +213,8 @@ public class Movie implements Comparable<Movie>{
         return Arrays.stream(Movie.Rating.values()).map(r ->String.valueOf(r.getValue())).toArray(String[]::new);
     }
 
-    static public String[] getDecadesStringArray() {
-        return Arrays.stream(Movie.Decades.values()).map(r ->String.valueOf(r.getValue())).toArray(String[]::new);
-    }
-
     public static List<Movie> allMoviesAPI(){
-
         String json = MovieAPI.getMoviesFilter(null, null, 0, 0);
-        //System.out.println(json);
         return  getMoviesFromJson(json);
     }
 
@@ -259,10 +225,6 @@ public class Movie implements Comparable<Movie>{
         Gson gson = new Gson();
         Type movieListType = new TypeToken<List<Movie>>() {}.getType();
         List<Movie> movies = gson.fromJson(json, movieListType);
-        /*
-        for (Movie m: movies)
-            System.out.println(m.title);
-         */
         return movies;
     }
 }
