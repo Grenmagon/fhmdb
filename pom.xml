@@ -115,6 +115,7 @@
                         <include>MovieTest</include>
                         <include>HomeControllerTest</include>
                         <include>MovieAPITest</include>
+                        <include>MovieUtilsTest</include>
 
                     </includes>
                 </configuration>
