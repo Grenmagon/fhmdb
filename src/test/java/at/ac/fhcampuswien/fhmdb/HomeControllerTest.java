@@ -29,8 +29,11 @@ public class HomeControllerTest {
         genreList.add(Movie.Genre.ACTION);
         genreList.add(Movie.Genre.SCIENCE_FICTION);
         Movie movie1 = new Movie("Avatar", "Film about the Aliens and not the bad one", genreList);
+        movie1.setReleaseYear(2009);
         Movie movie2 = new Movie("Star Wars Episode 1", "There is Podracing!!", genreList);
+        movie2.setReleaseYear(1999);
         Movie movie3 = new Movie("Star Wars Episode 4", "Luke goes on an Adventure!", genreList);
+        movie3.setReleaseYear(1977);
         observableMovies.addAll(movie1, movie2, movie3);
         homeController.setObservableMovies(observableMovies);
     }
@@ -41,21 +44,20 @@ public class HomeControllerTest {
     void movieNamesSortAsc() {
         homeController.sortAsc();
         assertEquals(homeController.getObservableMovies(), observableMovies);
-      /*  assertEquals("Avatar", observableMovies.get(0).getTitle());
-        assertEquals("Star Wars Episode 1", observableMovies.get(1).getTitle());
-        assertEquals("Star Wars Episode 4", observableMovies.get(2).getTitle());
-*/
     }
 
     @Test
     void movieNamesSortDesc() {
         homeController.sortDesc();
         assertEquals(homeController.getObservableMovies(), observableMovies);
-       /* assertEquals("Star Wars Episode 4", observableMovies.get(0).getTitle());
-        assertEquals("Star Wars Episode 1", observableMovies.get(1).getTitle());
-        assertEquals("Avatar", observableMovies.get(2).getTitle()); */
     }
 
+    @Test
+    void getYears() {
+        String[] actual = homeController.getYear();
+        String[] expected = new String[]{"1977","1999","2009"};
+        assertArrayEquals(expected, actual);
+    }
 
     /*Start Kathis Tests: */
 
@@ -68,7 +70,6 @@ public class HomeControllerTest {
         for(Movie m : observableMovies) {
             assertTrue(m.getGenres().contains(Movie.Genre.ACTION));
         }
-
     }
 
     @Test
@@ -78,18 +79,15 @@ public class HomeControllerTest {
         for(Movie m : observableMovies) {
             assertTrue(m.getGenres().contains(Movie.Genre.HORROR));
         }
-
     }
 
     //Tests ob der Such-Filter richtig angewandt wird
     @Test
     void filmFilterAPI_genre_COMEDIE()
     {
-
         assertThrows(IllegalArgumentException.class, () -> {
             homeController.filmFilterAPI("COMEDIE", null,0, 0.00);
         });
-
     }
 
     @Test
@@ -99,9 +97,7 @@ public class HomeControllerTest {
         for(Movie m : observableMovies) {
             assertTrue(m.getTitle().toLowerCase().contains("god"));
         }
-
     }
-
 
     //Tests ob der Such-Filter+Genre-Filter richtig angewandt wird
 
@@ -112,7 +108,6 @@ public class HomeControllerTest {
         for(Movie m : observableMovies) {
             assertTrue(m.getTitle().toLowerCase().contains("god"));
         }
-
     }
 
     @Test
@@ -122,7 +117,6 @@ public class HomeControllerTest {
         for(Movie m : observableMovies) {
             assertTrue(m.getTitle().contains("film")&& m.getGenres().contains(Movie.Genre.SCIENCE_FICTION) );
         }
-
     }
 
     /*Start Javids Tests: */
@@ -140,10 +134,6 @@ public class HomeControllerTest {
         assertEquals(originalMovies.size(), homeController.getObservableMovies().size());
         assertTrue(homeController.getObservableMovies().containsAll(originalMovies));
     }
-
-
-
-
 }
 
 
