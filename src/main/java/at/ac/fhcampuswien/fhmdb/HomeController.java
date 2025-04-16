@@ -2,6 +2,7 @@ package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.models.MovieAPIException;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -10,9 +11,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -41,6 +45,10 @@ public class HomeController implements Initializable {
     @FXML
     public JFXButton resetBtn;
 
+    @FXML
+    public JFXButton fillDB;
+
+
     public void setObservableMovies(ObservableList<Movie> observableMovies) {
         this.observableMovies = observableMovies;
     }
@@ -49,7 +57,18 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        List<Movie> initList = Movie.allMoviesAPI();
+       List<Movie> initList = null;
+       //= Movie.allMoviesAPI();
+        try
+        {
+            initList = Movie.getMoviesFromDB();
+        }
+        catch (SQLException e)
+        {
+            //throw new RuntimeException(e);
+            showError("DB Error", "Es ist ein Fehler beim laden der Filme aufgetreten",e);
+        }
+
         if (initList != null)
             observableMovies.addAll(initList);         // add dummy data to observable list
 
@@ -63,7 +82,7 @@ public class HomeController implements Initializable {
 
         // DONE add event handlers to buttons and call the regarding methods
         releaseYearComboBox.setPromptText("Filter by Release Year");
-        releaseYearComboBox.getItems().addAll(getYear());
+        releaseYearComboBox.getItems().addAll(getYears());
 
 
         ratingComboBox.setPromptText("Filter by Rating");
@@ -92,6 +111,8 @@ public class HomeController implements Initializable {
         });
 
         resetBtn.setOnAction(actionEvent -> onResetClicked());
+
+        fillDB.setOnAction(actionEvent -> refillMovieDb());
     }
 
     public void sortAsc() {
@@ -102,7 +123,7 @@ public class HomeController implements Initializable {
         observableMovies.sort(Collections.reverseOrder());
     }
 
-    public String[] getYear() {
+    public String[] getYears() {
         return observableMovies.stream().map(movie -> String.valueOf(movie.getReleaseYear())).distinct().sorted().toArray(String[]::new);
     }
 
@@ -110,9 +131,21 @@ public class HomeController implements Initializable {
         Movie.Genre genre = null;
         if (genreString != null && !genreString.isEmpty())
             genre = Movie.Genre.valueOf(genreString); //String von Genre in Enum umwandeln
-        String ergebnisJson = MovieAPI.getMoviesFilter(filter, genre, releaseYear, rating);
-        if (!ergebnisJson.equals(MovieAPI.ERROR))
+        String ergebnisJson = null;
+        try
+        {
+            ergebnisJson = MovieAPI.getMoviesFilter(filter, genre, releaseYear, rating);
             observableMovies.setAll(Movie.getMoviesFromJson(ergebnisJson));
+        }
+        catch (IOException e)
+        {
+            showError("IOError", "Fehler beim Laden der Filme", e);
+        }
+        catch (MovieAPIException e)
+        {
+            showError("MovieAPI Error", "Fehler beim Laden der Filme", e);
+        }
+
     }
 
     @FXML
@@ -120,11 +153,53 @@ public class HomeController implements Initializable {
         searchField.clear();  // Suchfeld leeren
         Stream.of(genreComboBox, releaseYearComboBox, ratingComboBox)
                 .forEach( comboBox ->comboBox.getSelectionModel().clearSelection());  // Genre-Filter zurücksetzen
-        observableMovies.setAll(Movie.allMoviesAPI());  // Komplette Film-Liste wiederherstellen
+        try
+        {
+            observableMovies.setAll(Movie.allMoviesAPI());  // Komplette Film-Liste wiederherstellen
+        }
+        catch (IOException e)
+        {
+            showError("IOError", "Fehler beim Laden der Filme", e);
+        }
+        catch (MovieAPIException e)
+        {
+            showError("MovieAPI Error", "Fehler beim Laden der Filme", e);
+        }
     }
 
     public ObservableList<Movie> getObservableMovies() {
         return observableMovies;
+    }
+
+    public static void showError(String title, String message, Exception e)
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(message);
+        alert.setContentText(e.getMessage());
+        alert.showAndWait();
+    }
+
+    private void refillMovieDb()
+    {
+        try
+        {
+            Movie.loadFromApiToDB();
+            observableMovies.setAll(Movie.getMoviesFromDB());
+            releaseYearComboBox.getItems().setAll(getYears());
+        }
+        catch (SQLException e)
+        {
+            showError("DB Error", "Es ist ein Fehler beim reloaden der Filme aufgetreten",e);
+        }
+        catch (IOException e)
+        {
+            showError("IOError", "Fehler beim Laden der Filme", e);
+        }
+        catch (MovieAPIException e)
+        {
+            showError("MovieAPI Error", "Fehler beim Laden der Filme", e);
+        }
     }
 
 }

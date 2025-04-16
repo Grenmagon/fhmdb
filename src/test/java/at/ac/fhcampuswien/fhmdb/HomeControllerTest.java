@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,7 +55,7 @@ public class HomeControllerTest {
 
     @Test
     void getYears() {
-        String[] actual = homeController.getYear();
+        String[] actual = homeController.getYears();
         String[] expected = new String[]{"1977","1999","2009"};
         assertArrayEquals(expected, actual);
     }

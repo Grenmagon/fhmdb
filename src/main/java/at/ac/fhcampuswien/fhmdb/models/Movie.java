@@ -1,9 +1,13 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
+import at.ac.fhcampuswien.fhmdb.database.MovieEntity;
+import at.ac.fhcampuswien.fhmdb.database.MovieRepository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.sql.SQLException;
 import java.util.*;
 
 public class Movie implements Comparable<Movie>{
@@ -65,13 +69,13 @@ public class Movie implements Comparable<Movie>{
     private String description;
     private List<Genre> genres;
 
-    private Integer releaseYear;
+    private int releaseYear;
     private String imgUrl;
     private int lengthInMinutes;
     private List<String> directors;
     private List<String> writers;
     private List<String> mainCast;
-    private Double rating;
+    private double rating;
 
     public Movie(String title, String description, List<Genre> genres) {
         this.title = title;
@@ -213,7 +217,8 @@ public class Movie implements Comparable<Movie>{
         return Arrays.stream(Movie.Rating.values()).map(r ->String.valueOf(r.getValue())).toArray(String[]::new);
     }
 
-    public static List<Movie> allMoviesAPI(){
+    public static List<Movie> allMoviesAPI() throws IOException, MovieAPIException
+    {
         String json = MovieAPI.getMoviesFilter(null, null, 0, 0);
         return  getMoviesFromJson(json);
     }
@@ -226,5 +231,18 @@ public class Movie implements Comparable<Movie>{
         Type movieListType = new TypeToken<List<Movie>>() {}.getType();
         List<Movie> movies = gson.fromJson(json, movieListType);
         return movies;
+    }
+
+    public static List<Movie> getMoviesFromDB() throws SQLException
+    {
+        MovieRepository mr = new MovieRepository();
+        return MovieEntity.toMovies(mr.getAllMovies());
+    }
+
+    public static void loadFromApiToDB() throws SQLException, IOException, MovieAPIException
+    {
+        MovieRepository mr = new MovieRepository();
+        mr.removeAll();
+        mr.addAllMovies(allMoviesAPI());
     }
 }

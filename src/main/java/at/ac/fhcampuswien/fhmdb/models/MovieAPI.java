@@ -9,7 +9,6 @@ import okhttp3.Response;
 import java.io.IOException;
 //import java.sql.SQLOutput;
 
-
 public class MovieAPI
 {
     static final private String MOVIE_URL = "https://prog2.fh-campuswien.ac.at/movies";
@@ -24,7 +23,7 @@ public class MovieAPI
     Enum: null
     int: 0
      */
-    public static String getMoviesFilter(String query, Movie.Genre genre, int releaseYear, double ratingFrom)
+    public static String getMoviesFilter(String query, Movie.Genre genre, int releaseYear, double ratingFrom) throws IOException, MovieAPIException
     {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(MOVIE_URL).newBuilder();
         if (query != null && !query.isEmpty())
@@ -45,30 +44,23 @@ public class MovieAPI
                 .addHeader("User-Agent", "http.agent") //without this, you are not permited to acces the server
                 .build();
 
-        try
-        {
             Response response = CLIENT.newCall(request).execute();
             if (response.body() != null)
             {
                 String resString = response.body().string();
                 if (resString.isEmpty())
                 {
-                    System.out.println("Empty Response Error!");
-                    return ERROR;
+                    throw new MovieAPIException("Empty Response Error!");
+                    //return ERROR;
                 }
                 return resString;
             }
             else
             {
-                System.out.println("Null Response Error!");
-                return ERROR;
+                throw new MovieAPIException("Null Response Error!");
+                //return ERROR;
             }
-        }
-        catch (IOException e)
-        {
-            System.out.println("Network Error!");
-            return ERROR;
-        }
+
     }
 
 

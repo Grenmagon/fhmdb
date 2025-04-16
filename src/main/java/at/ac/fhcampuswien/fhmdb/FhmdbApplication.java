@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.database.DatabaseConsole;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,7 +18,15 @@ public class FhmdbApplication extends Application {
         stage.setTitle("FHMDb");
         stage.setScene(scene);
         stage.show();
+
+        DatabaseConsole.startConsole();
     }
+
+    @Override
+    public void stop() {
+        DatabaseConsole.stopConsole(); // <-- H2 Web-Console sauber schließen
+    }
+
 
     public static void main(String[] args) {
         launch();

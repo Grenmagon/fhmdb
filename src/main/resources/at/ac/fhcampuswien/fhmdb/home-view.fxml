@@ -21,6 +21,8 @@
             </padding>
          </Label>
          <Label styleClass="text-white" stylesheets="@styles.css" text="Welcome to FHMDb!" />
+         <JFXButton fx:id="fillDB" styleClass="background-yellow" stylesheets="@styles.css" text="Load Movies from Web"/>
+
       </children>
    </HBox>
    <HBox spacing="5.0" styleClass="background-black" stylesheets="@styles.css">
@@ -32,6 +34,7 @@
          <JFXComboBox fx:id="releaseYearComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
          <JFXButton fx:id="searchBtn" styleClass="background-yellow" stylesheets="@styles.css" text="Filter" />
          <JFXButton fx:id="resetBtn" styleClass="background-yellow" stylesheets="@styles.css" text="Reset" onAction="#onResetClicked" />
+
       </children>
       <VBox.margin>
          <Insets />

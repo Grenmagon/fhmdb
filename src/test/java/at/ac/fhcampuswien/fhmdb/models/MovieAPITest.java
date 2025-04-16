@@ -61,7 +61,8 @@ class MovieAPITest
     }
 
     @Test
-    void testGetMoviesFilter_Success() throws IOException {
+    void testGetMoviesFilter_Success() throws IOException, MovieAPIException
+    {
         String response = MovieAPI.getMoviesFilter("God", Movie.Genre.ACTION, 2010, 8.0);
 
         assertNotNull(response);
@@ -73,27 +74,39 @@ class MovieAPITest
     void testGetMoviesFilter_EmptyResponse() throws IOException {
         when(mockResponseBody.string()).thenReturn("");
 
-        String response = MovieAPI.getMoviesFilter("", null, 0, 0);
+        //String response = MovieAPI.getMoviesFilter("", null, 0, 0);
+        //assertEquals(MovieAPI.ERROR, response);
+        Exception ex = assertThrows(MovieAPIException.class, () -> {
+            MovieAPI.getMoviesFilter("", null, 0, 0);
+        });
 
-        assertEquals(MovieAPI.ERROR, response);
+        assertEquals("Empty Response Error!", ex.getMessage());
     }
 
     @Test
     void testGetMoviesFilter_NullResponse() throws IOException {
         when(mockResponse.body()).thenReturn(null);
 
-        String response = MovieAPI.getMoviesFilter("", null, 0, 0);
+        //String response = MovieAPI.getMoviesFilter("", null, 0, 0);
+        //assertEquals(MovieAPI.ERROR, response);
+        Exception ex = assertThrows(MovieAPIException.class, () -> {
+            MovieAPI.getMoviesFilter("", null, 0, 0);
+        });
 
-        assertEquals(MovieAPI.ERROR, response);
+        assertEquals("Null Response Error!", ex.getMessage());
     }
 
     @Test
     void testGetMoviesFilter_IOException() throws IOException {
         when(mockCall.execute()).thenThrow(new IOException("Network error"));
 
-        String response = MovieAPI.getMoviesFilter("Test", null, 0, 0);
+        //String response = MovieAPI.getMoviesFilter("Test", null, 0, 0);
+        //assertEquals(MovieAPI.ERROR, response);
+        assertThrows(IOException.class, () -> {
+            MovieAPI.getMoviesFilter("", null, 0, 0);
+        });
 
-        assertEquals(MovieAPI.ERROR, response);
+        //assertEquals("Null Response Error!", ex.getMessage());
     }
 
 }
