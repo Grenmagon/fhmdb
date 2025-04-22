@@ -1,8 +1,11 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.database.Database;
+import at.ac.fhcampuswien.fhmdb.database.WatchListRepository;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.models.MovieAPIException;
+import at.ac.fhcampuswien.fhmdb.ui.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -48,6 +51,8 @@ public class HomeController implements Initializable {
     @FXML
     public JFXButton fillDB;
 
+    private WatchListRepository watchListRepository;
+
 
     public void setObservableMovies(ObservableList<Movie> observableMovies) {
         this.observableMovies = observableMovies;
@@ -57,6 +62,12 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        try {
+            watchListRepository = new WatchListRepository(Database.getWatchListDao());
+        } catch (SQLException e) {
+            showError("DB Error", "Failed to initialize WatchListRepository", e);
+        }
        List<Movie> initList = null;
        //= Movie.allMoviesAPI();
         try
@@ -72,9 +83,22 @@ public class HomeController implements Initializable {
         if (initList != null)
             observableMovies.addAll(initList);         // add dummy data to observable list
 
+        ClickEventHandler<Movie> onAddToWatchlistClicked = (Movie movie) -> {
+            try {
+                int result = watchListRepository.addToWatchList(movie.getId());
+                if (result == 1) {
+                    System.out.println("Added to Watchlist: " + movie.getTitle());
+                } else {
+                    System.out.println("Already in Watchlist: " + movie.getTitle());
+                }
+            } catch (SQLException e) {
+                showError("DB Error", "Could not add movie to watchlist", e);
+            }
+        };
+
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
-        movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
+        movieListView.setCellFactory(movieListView -> new MovieCell(onAddToWatchlistClicked)); // use custom cell factory to display data
 
         // DONE add genre filter items with genreComboBox.getItems().addAll(...)
         genreComboBox.setPromptText("Filter by Genre");

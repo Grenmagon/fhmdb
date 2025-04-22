@@ -17,6 +17,7 @@ public class Database
 
     private static JdbcConnectionSource connectionSource;
     private static Dao<MovieEntity, Long> movieEntitiesDao;
+    private static Dao<WatchListMovieEntity, Long> watchListDao;
 
     private static Database instance;
 
@@ -24,6 +25,7 @@ public class Database
     {
         createConnectionSource();
         movieEntitiesDao = DaoManager.createDao(connectionSource, MovieEntity.class);
+        watchListDao = DaoManager.createDao(connectionSource, WatchListMovieEntity.class);
         createTables();
     }
 
@@ -50,12 +52,19 @@ public class Database
         getDB();
         return movieEntitiesDao;
     }
+    public static Dao<WatchListMovieEntity, Long> getWatchListDao() throws SQLException {
+        // Make sure the database instance and DAO are initialized
+        getDB();
 
+        // Return the DAO that allows interacting with the watchList table
+        return watchListDao;
+    }
 
     // Hier werden die neuen Tabellen hinzugefügt
     private static void createTables() throws SQLException
     {
         TableUtils.createTableIfNotExists(connectionSource, MovieEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, WatchListMovieEntity.class);
     }
 
 }
