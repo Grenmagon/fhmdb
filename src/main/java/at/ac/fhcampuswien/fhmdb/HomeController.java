@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class HomeController implements Initializable {
@@ -52,7 +53,7 @@ public class HomeController implements Initializable {
     public JFXButton fillDB;
 
     private WatchListRepository watchListRepository;
-
+    private List<Movie> allMovies = new ArrayList<>();
 
     public void setObservableMovies(ObservableList<Movie> observableMovies) {
         this.observableMovies = observableMovies;
@@ -81,7 +82,9 @@ public class HomeController implements Initializable {
         }
 
         if (initList != null)
-            observableMovies.addAll(initList);         // add dummy data to observable list
+            allMovies = new ArrayList<>(initList);
+            observableMovies.setAll(allMovies);
+        // observableMovies.addAll(initList);         // add dummy data to observable list
 
         ClickEventHandler<Movie> onAddToWatchlistClicked = (Movie movie) -> {
             try {
@@ -112,7 +115,7 @@ public class HomeController implements Initializable {
         ratingComboBox.setPromptText("Filter by Rating");
         ratingComboBox.getItems().addAll(Movie.getRatingStringArray());
 
-        searchBtn.setOnAction(actionEvent -> filmFilterAPI(
+        searchBtn.setOnAction(actionEvent -> filterMoviesLocally(
                 genreComboBox.getValue() == null ? null : genreComboBox.getValue().toString(),
                 searchField.getText(),
                 releaseYearComboBox.getValue() == null ? 0 : Integer.parseInt(releaseYearComboBox.getValue().toString()),
@@ -151,7 +154,7 @@ public class HomeController implements Initializable {
         return observableMovies.stream().map(movie -> String.valueOf(movie.getReleaseYear())).distinct().sorted().toArray(String[]::new);
     }
 
-    public void filmFilterAPI(String genreString, String filter, int releaseYear, double rating) {
+    /*public void filmFilterAPI(String genreString, String filter, int releaseYear, double rating) {
         Movie.Genre genre = null;
         if (genreString != null && !genreString.isEmpty())
             genre = Movie.Genre.valueOf(genreString); //String von Genre in Enum umwandeln
@@ -170,16 +173,45 @@ public class HomeController implements Initializable {
             showError("MovieAPI Error", "Fehler beim Laden der Filme", e);
         }
 
+    }*/
+    public void filterMoviesLocally(String genreString, String searchText, int releaseYear, double minRating) {
+        // parse genre if specified
+        final Movie.Genre genre = (genreString != null && !genreString.isEmpty())
+                ? Movie.Genre.valueOf(genreString)
+                : null;
+
+        // build filtered list
+        List<Movie> filtered = allMovies.stream()
+                .filter(m -> genre == null || m.getGenres().contains(genre))
+                .filter(m -> searchText == null || searchText.isBlank()
+                        || m.getTitle().toLowerCase().contains(searchText.toLowerCase())
+                        || (m.getDescription() != null && m.getDescription().toLowerCase().contains(searchText.toLowerCase())))
+                .filter(m -> releaseYear <= 0 || m.getReleaseYear() == releaseYear)
+                .filter(m -> minRating <= 0.0 || m.getRating() >= minRating)
+                .collect(Collectors.toList());
+
+        // update UI list
+        observableMovies.setAll(filtered);
     }
 
     @FXML
     public void onResetClicked() {
-        searchField.clear();  // Suchfeld leeren
+        //  Clear the search text field so the user sees an empty query box
+        searchField.clear();
+
+        // Reset all combo-box filters (genre, year, rating) back to “none selected”
+        Stream.of(genreComboBox, releaseYearComboBox, ratingComboBox)
+                .forEach(cb -> cb.getSelectionModel().clearSelection());
+
+        // Restore the full, unfiltered movie list from our in-memory copy
+        observableMovies.setAll(allMovies);
+    }
+        /*searchField.clear();  // Suchfeld leeren
         Stream.of(genreComboBox, releaseYearComboBox, ratingComboBox)
                 .forEach( comboBox ->comboBox.getSelectionModel().clearSelection());  // Genre-Filter zurücksetzen
         try
         {
-            observableMovies.setAll(Movie.allMoviesAPI());  // Komplette Film-Liste wiederherstellen
+            observableMovies.setAll(allMovies);  // Komplette Film-Liste wiederherstellen
         }
         catch (IOException e)
         {
@@ -189,7 +221,7 @@ public class HomeController implements Initializable {
         {
             showError("MovieAPI Error", "Fehler beim Laden der Filme", e);
         }
-    }
+    }*/
 
     public ObservableList<Movie> getObservableMovies() {
         return observableMovies;
@@ -209,7 +241,9 @@ public class HomeController implements Initializable {
         try
         {
             Movie.loadFromApiToDB();
-            observableMovies.setAll(Movie.getMoviesFromDB());
+            List<Movie> fresh = Movie.getMoviesFromDB();
+            allMovies = new ArrayList<>(fresh);
+            observableMovies.setAll(allMovies);
             releaseYearComboBox.getItems().setAll(getYears());
         }
         catch (SQLException e)
