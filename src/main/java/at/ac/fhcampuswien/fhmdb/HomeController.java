@@ -154,7 +154,7 @@ public class HomeController implements Initializable {
         return observableMovies.stream().map(movie -> String.valueOf(movie.getReleaseYear())).distinct().sorted().toArray(String[]::new);
     }
 
-    /*public void filmFilterAPI(String genreString, String filter, int releaseYear, double rating) {
+    public void filmFilterAPI(String genreString, String filter, int releaseYear, double rating) {
         Movie.Genre genre = null;
         if (genreString != null && !genreString.isEmpty())
             genre = Movie.Genre.valueOf(genreString); //String von Genre in Enum umwandeln
@@ -173,7 +173,7 @@ public class HomeController implements Initializable {
             showError("MovieAPI Error", "Fehler beim Laden der Filme", e);
         }
 
-    }*/
+    }
     public void filterMoviesLocally(String genreString, String searchText, int releaseYear, double minRating) {
         // parse genre if specified
         final Movie.Genre genre = (genreString != null && !genreString.isEmpty())

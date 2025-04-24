@@ -131,6 +131,12 @@
                         <include>MovieAPITest</include>
                         <include>MovieUtilsTest</include>
 
+                        <include>DatabaseTest</include>
+                        <include>MovieEntityTest</include>
+                        <include>MovieRepositoryTest</include>
+                        <include>WatchListMovieEntityTest</include>
+                        <include>WatchListRepositoryTest</include>
+
                     </includes>
                 </configuration>
             </plugin>

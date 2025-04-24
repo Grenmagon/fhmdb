@@ -65,6 +65,76 @@ public class MovieEntity
         this.id = id;
     }
 
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
+    public String getGenres()
+    {
+        return genres;
+    }
+
+    public void setGenres(String genres)
+    {
+        this.genres = genres;
+    }
+
+    public int getReleaseYear()
+    {
+        return releaseYear;
+    }
+
+    public void setReleaseYear(int releaseYear)
+    {
+        this.releaseYear = releaseYear;
+    }
+
+    public String getImgUrl()
+    {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl)
+    {
+        this.imgUrl = imgUrl;
+    }
+
+    public int getLengthInMinutes()
+    {
+        return lengthInMinutes;
+    }
+
+    public void setLengthInMinutes(int lengthInMinutes)
+    {
+        this.lengthInMinutes = lengthInMinutes;
+    }
+
+    public double getRating()
+    {
+        return rating;
+    }
+
+    public void setRating(double rating)
+    {
+        this.rating = rating;
+    }
+
     public static MovieEntity fromMovie(Movie movie)
     {
         return new MovieEntity(movie.getId(), movie.getTitle(), movie.getDescription(), genresToString(movie.getGenres()), movie.getReleaseYear(), movie.getImgUrl(), movie.getLengthInMinutes(), movie.getRating());
@@ -103,7 +173,7 @@ public class MovieEntity
     }
 
 
-    private static String genresToString(List<Movie.Genre> genres)
+    public static String genresToString(List<Movie.Genre> genres)
     {
         StringJoiner joiner = new StringJoiner(",");
         for(Movie.Genre genre: genres)
