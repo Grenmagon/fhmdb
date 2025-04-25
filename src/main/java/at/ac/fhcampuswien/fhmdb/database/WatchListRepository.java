@@ -8,11 +8,12 @@ import java.util.List;
 public class WatchListRepository {
     Dao<WatchListMovieEntity, Long> dao;
 
-    public WatchListRepository(Dao<WatchListMovieEntity, Long> dao) throws SQLException {
-        this.dao = dao;
+    public WatchListRepository(/*Dao<WatchListMovieEntity, Long> dao*/) throws SQLException {
+        //this.dao = dao;
+        this.dao = Database.getWatchListDao();
     }
 
-    List<WatchListMovieEntity> getWatchList() throws SQLException{
+    public List<WatchListMovieEntity> getWatchList() throws SQLException{
         return dao.queryForAll();
     }
 
@@ -30,7 +31,7 @@ public class WatchListRepository {
     };
 
 
-    int removeFromWatchList(String apiId)throws SQLException {
+    public int removeFromWatchList(String apiId)throws SQLException {
         // Query the database to find any WatchListMovieEntity entries that match the given apiId
         List<WatchListMovieEntity> found = dao.queryForEq("apiId", apiId);
         // If a matching entry is found, delete the first one from the list
@@ -39,6 +40,8 @@ public class WatchListRepository {
         }
         return 0; // If no matching entry is found, return 0 (nothing was deleted)
     };
+
+
 
 
 }

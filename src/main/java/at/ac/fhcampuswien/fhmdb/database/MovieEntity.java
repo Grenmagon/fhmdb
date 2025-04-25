@@ -175,6 +175,7 @@ public class MovieEntity
 
     public static String genresToString(List<Movie.Genre> genres)
     {
+        if (genres == null) return ""; //To avoid NullPointerException if genres is null
         StringJoiner joiner = new StringJoiner(",");
         for(Movie.Genre genre: genres)
         {

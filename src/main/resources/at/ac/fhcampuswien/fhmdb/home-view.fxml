@@ -34,7 +34,7 @@
          <JFXComboBox fx:id="releaseYearComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
          <JFXButton fx:id="searchBtn" styleClass="background-yellow" stylesheets="@styles.css" text="Filter" />
          <JFXButton fx:id="resetBtn" styleClass="background-yellow" stylesheets="@styles.css" text="Reset" onAction="#onResetClicked" />
-
+         <JFXButton fx:id="toggleViewBtn" styleClass="background-yellow" stylesheets="@styles.css" text="Zur Watchlist" onAction="#onToggleViewClicked"/>
       </children>
       <VBox.margin>
          <Insets />
@@ -43,5 +43,6 @@
          <Insets bottom="20.0" left="10.0" top="20.0" />
       </padding>
    </HBox>
+   <Label fx:id="errorLabel" stylesheets="@styles.css" styleClass="error-label" text="" visible="false"/>
    <JFXListView fx:id="movieListView" style="-fx-background-color: black;" styleClass="background-black" stylesheets="@styles.css" VBox.vgrow="ALWAYS" />
 </VBox>

@@ -25,4 +25,6 @@ public class WatchListMovieEntity {
         this.apiId = apiId;
     }
 
+
+
 }

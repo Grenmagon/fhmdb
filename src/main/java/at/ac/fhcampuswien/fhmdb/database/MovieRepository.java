@@ -4,6 +4,7 @@ import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieRepository
@@ -53,6 +54,22 @@ public class MovieRepository
     public int addAllMovies(List<Movie> movies) throws SQLException
     {
         return dao.create(MovieEntity.fromMovies(movies));
+    }
+
+    //TODO beibehalten????
+    public List<Movie> getMoviesFromWatchlist() throws SQLException {
+        WatchListRepository watchListRepository = new WatchListRepository();
+
+        List<WatchListMovieEntity> watchList = watchListRepository.getWatchList();
+        List<String> apiIds = new ArrayList<>();
+        for(WatchListMovieEntity watchListMovieEntity: watchList)
+            apiIds.add(watchListMovieEntity.getApiId());
+
+        if (apiIds.isEmpty())
+            return new ArrayList<>();
+
+         return MovieEntity.toMovies( dao.queryBuilder().where().in("apiId", apiIds).query());
+
     }
 
 

@@ -67,4 +67,5 @@ public class Database
         TableUtils.createTableIfNotExists(connectionSource, WatchListMovieEntity.class);
     }
 
+
 }

@@ -9,6 +9,7 @@ module at.ac.fhcampuswien.fhmdb {
     requires ormlite.jdbc;
     requires java.sql;
     requires com.h2database;
+    requires java.desktop;
 
     opens at.ac.fhcampuswien.fhmdb.database to ormlite.jdbc;
     opens at.ac.fhcampuswien.fhmdb to javafx.fxml;
