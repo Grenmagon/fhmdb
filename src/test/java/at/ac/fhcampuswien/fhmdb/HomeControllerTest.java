@@ -184,48 +184,7 @@ public class HomeControllerTest {
 
     /* new Tests Kathi for Exercise three*/
 
-    /*
-    //Testing the error label
-    @Test
-    void testShowError_setsErrorMessageAndVisible() {
-        String errorMessage = "An error occurred!";
-
-        homeController.showError(errorMessage, "an unnokn error occured", new Exception());
-
-        assertEquals(errorMessage, homeController.errorLabel.getText()); //Check if error label shows correct text
-        assertTrue(homeController.errorLabel.isVisible()); //Check if error label is visible
-    }
-*/
-    //Testing on TogleSwitched
-/*
-    //If showingWatchlist becomes true, button text becomes "Back Home"
-    @Test
-    void testOnToggleViewClicked_switchesToWatchlist() {
-        // Initially showingWatchlist is false
-
-        homeController.onToggleViewClicked();
-
-        assertTrue(homeController.showingWatchlist);
-        assertEquals("Back Home", homeController.toggleViewBtn.getText());
-    }
-*/
-    //If showingWatchlist becomes false, button text becomes "To Watchlist"
-
-    /*
-    @Test
-    void testOnToggleViewClicked_switchesToHome() {
-        // Set it to true first
-        homeController.showingWatchlist = true;
-
-        homeController.onToggleViewClicked();
-
-        assertFalse(homeController.showingWatchlist);
-        assertEquals("To Watchlist", homeController.toggleViewBtn.getText());
-    }
-    */
-
     //test three cases: Normal case where one movie matches,Empty watchlist case,Exception case (if database throws an error)
-
 
     @Test
     void testFillListWithWatchlist_successfullyFiltersMovies() throws SQLException {
@@ -267,73 +226,6 @@ public class HomeControllerTest {
     }
 
 
-//If showingWatchlist == false, it should reset observableMovies to the full movie list
-    /*
-    @Test
-    void testOnResetClicked_WhenNotShowingWatchlist() {
-        // Arrange
-        homeController.showingWatchlist = false;
-        homeController.getObservableMovies().clear();
-
-        // Act
-        homeController.onResetClicked();
-
-        // Assert
-        assertEquals(homeController.getAllMovies().size(), homeController.getObservableMovies().size());
-        assertTrue(homeController.getObservableMovies().containsAll(homeController.getAllMovies()));
-    }
-
-     */
-
-    //If showingWatchlist == true, it should call fillListWithWatchlist()
-/*
-    @Test
-    void testOnResetClicked_WhenShowingWatchlist() throws SQLException {
-        // Arrange
-        homeController = spy(homeController);  // Spy to verify method calls
-        homeController.showingWatchlist = true;
-
-        doNothing().when(homeController).fillListWithWatchlist();
-
-        // Act
-        homeController.onResetClicked();
-
-        // Assert
-        verify(homeController, times(1)).fillListWithWatchlist();
-    }
-
- */
-
-    //refillMovieDb->>Fills observableMovies correctly
-
-    /*
-    @Test
-    void testRefillMovieDb_Successful() throws Exception {
-        // Arrange
-        HomeController controller = spy(new HomeController());
-        controller.setObservableMovies(FXCollections.observableArrayList());
-        //controller.releaseYearComboBox = new ComboBox<>();
-        //controller.releaseYearComboBox.getItems().setAll(homeController.getYears());
-
-        List<Movie> mockMovies = List.of(
-                new Movie("Mock Movie 1", "Description", List.of(Movie.Genre.ACTION, Movie.Genre.DRAMA))
-        );
-
-        // Mock static methods
-        try (MockedStatic<Movie> movieStatic = mockStatic(Movie.class)) {
-            movieStatic.when(Movie::loadFromApiToDB).thenAnswer(invocation -> null); //loadFromApiToDB does nothing
-            movieStatic.when(Movie::getMoviesFromDB).thenReturn(mockMovies);
-
-            // Act
-            controller.refillMovieDb();
-        }
-
-        // Assert
-        assertEquals(1, controller.getObservableMovies().size());
-        assertEquals("Mock Movie 1", controller.getObservableMovies().get(0).getTitle());
-    }
-     */
-
     //RemoveFromWatchlist->>Removes from DB, fills watchlist, shows success
     @Test
     void testRemoveFromWatchlist_Success() throws Exception {
@@ -347,7 +239,7 @@ public class HomeControllerTest {
         // IMPORTANT: Stub getWatchListRepository() to return your mock
         doReturn(watchListRepositoryMock).when(controller).getWatchListRepository();
 
-        //doNothing().when(controller.getWatchListRepository()).removeFromWatchList(anyString());
+
         doNothing().when(controller).fillListWithWatchlist();
         doNothing().when(controller).showSuccessMessage(anyString());
 
@@ -357,7 +249,7 @@ public class HomeControllerTest {
         // Assert
         verify(controller.getWatchListRepository(), times(1)).removeFromWatchList(testMovie.getId());
         verify(controller, times(1)).fillListWithWatchlist();
-        //verify(controller, times(1)).showSuccessMessage(contains("removed"));
+
     }
 
     //addToWatchlist-->>Adds to DB, shows success message
@@ -382,34 +274,8 @@ public class HomeControllerTest {
 
         // Assert
         verify(mockRepository, times(1)).addToWatchList(testMovie.getId());
-        //verify(controller, times(1)).showSuccessMessage(contains("Added"));
+
     }
-
-    //onDetailButtonClicked-->>Opens a detail window without exception
-
-    /*
-    @Test
-    void testOnDetailButtonClicked_DoesNotThrow() {
-        // Arrange
-        HomeController controller = new HomeController();
-        Movie movie = new Movie("Test Movie", "A test description", List.of());
-
-        // Act & Assert
-        assertDoesNotThrow(() -> controller.onDetailButtonClicked(movie));
-    }
-
-     */
-
-
-
-
-
-
-
-
-
-
-
 
 }
 

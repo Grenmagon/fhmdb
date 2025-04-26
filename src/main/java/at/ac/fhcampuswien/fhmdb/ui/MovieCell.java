@@ -1,7 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
 import at.ac.fhcampuswien.fhmdb.HomeController;
-import at.ac.fhcampuswien.fhmdb.database.WatchListRepository;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.jfoenix.controls.JFXButton;
 import javafx.geometry.Insets;
@@ -12,7 +11,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.control.Button;
 
 public class MovieCell extends ListCell<Movie> {
     private final Label title = new Label();
@@ -41,7 +39,6 @@ public class MovieCell extends ListCell<Movie> {
             setText(null);
             setGraphic(null);  //Damit die leeren Elemente nicht mehr angezeigt werden
         } else {
-            //System.out.println(movie.getTitle() + " " + homeController.showingWatchlist);
             this.getStyleClass().add("movie-cell");
             title.setText(movie.getTitle());
             detail.setText(

@@ -22,9 +22,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
-import java.awt.*;
+
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -136,7 +136,7 @@ public class HomeController implements Initializable {
         if (initList != null)
             allMovies = new ArrayList<>(initList);
         observableMovies.setAll(allMovies);
-        // observableMovies.addAll(initList);         // add dummy data to observable list
+
 /*
         ClickEventHandler<Movie> watchlistBtnClicked = (Movie movie) -> {
             System.out.println("hmm:" + showingWatchlist);
@@ -198,15 +198,6 @@ public class HomeController implements Initializable {
         fillDB.setOnAction(actionEvent -> refillMovieDb());
     }
 
-    public void watchlistBtnClicked_Home()
-    {
-
-    }
-
-    public void watchlistBtnClicked_Watchlist()
-    {
-
-    }
 
     public void sortAsc() {
         observableMovies.sort(null);

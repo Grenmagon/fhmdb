@@ -9,7 +9,7 @@ public class WatchListRepository {
     Dao<WatchListMovieEntity, Long> dao;
 
     public WatchListRepository(/*Dao<WatchListMovieEntity, Long> dao*/) throws SQLException {
-        //this.dao = dao;
+
         this.dao = Database.getWatchListDao();
     }
 

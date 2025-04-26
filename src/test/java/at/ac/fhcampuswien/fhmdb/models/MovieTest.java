@@ -5,7 +5,6 @@ import at.ac.fhcampuswien.fhmdb.database.MovieEntity;
 import at.ac.fhcampuswien.fhmdb.database.MovieRepository;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -164,7 +163,6 @@ class MovieTest
 
     /* new Tests Kathi for Exercise three*/
 
-    //private static final String SAMPLE_JSON = "[{\"title\":\"Test Movie\",\"description\":\"Test Description\",\"genres\":[\"Action\"]}]";
 
     //Test a normal valid JSON → Should return a list with expected data.
     @Test
@@ -184,30 +182,7 @@ class MovieTest
 
         assertNull(movies);
     }
-/*
-//Mock MovieAPI.getMoviesFilter to return a fake JSON.
-    @Test
-    void testAllMoviesAPI_returnsMovies() throws IOException, MovieAPIException {
-        // Mock the MovieAPI
-        MovieAPI movieApiMock = mock(MovieAPI.class);
-        when(MovieAPI.getMoviesFilter(null, null, 0, 0)).thenReturn(JSON);
 
-        List<Movie> movies = Movie.allMoviesAPI();
-
-        assertNotNull(movies);
-        assertEquals(1, movies.size());
-        assertEquals("Test Movie", movies.get(0).getTitle());
-    }
-
-//test what happens if it throws MovieAPIException.
-    @Test
-    void testAllMoviesAPI_throwsMovieAPIException() {
-        assertThrows(MovieAPIException.class, () -> {
-            when(MovieAPI.getMoviesFilter(null, null, 0, 0)).thenThrow(new MovieAPIException("API error"));
-            Movie.allMoviesAPI();
-        });
-    }
-*/
     //Normally you'd want to inject MovieRepository, but instantiated directly ->> simulate it by overriding it
     @Test
     void testGetMoviesFromDB_returnsMovies() throws SQLException {
