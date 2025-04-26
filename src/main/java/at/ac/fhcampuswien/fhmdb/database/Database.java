@@ -11,12 +11,12 @@ import java.util.List;
 
 public class Database
 {
-    public static final String DB_URL = "jdbc:h2:file: ./db/fhmdb";
+    public static final String DB_URL = "jdbc:h2:file: ./db/fhmdb"; // wo wird Datenbank abgelegt
     public static final String USER = "user";
     public static final String PASSWD = "pass";
 
     private static JdbcConnectionSource connectionSource;
-    private static Dao<MovieEntity, Long> movieEntitiesDao;
+    private static Dao<MovieEntity, Long> movieEntitiesDao; //DAO statements für Datenbank
     private static Dao<WatchListMovieEntity, Long> watchListDao;
 
     private static Database instance;
@@ -29,7 +29,7 @@ public class Database
         createTables();
     }
 
-    public static Database getDB() throws SQLException
+    public static Database getDB() throws SQLException // auf Datenbank darf nur einmal zugegriffen werden, nicht parallel
     {
         if (instance == null)
             instance = new Database();

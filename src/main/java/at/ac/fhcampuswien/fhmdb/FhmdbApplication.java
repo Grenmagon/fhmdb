@@ -19,7 +19,7 @@ public class FhmdbApplication extends Application {
         stage.setScene(scene);
         stage.show();
 
-        DatabaseConsole.startConsole();
+        DatabaseConsole.startConsole(); //wenn Application gestartet wird- Datenbankverbindung
     }
 
     @Override

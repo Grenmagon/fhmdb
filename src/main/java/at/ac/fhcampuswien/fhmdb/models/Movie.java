@@ -255,4 +255,20 @@ public class Movie implements Comparable<Movie>{
         mr.addAllMovies(allMoviesAPI());
     }
 
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", genres=" + genres +
+                ", releaseYear=" + releaseYear +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", lengthInMinutes=" + lengthInMinutes +
+                ", directors=" + directors +
+                ", writers=" + writers +
+                ", mainCast=" + mainCast +
+                ", rating=" + rating +
+                '}';
+    }
 }

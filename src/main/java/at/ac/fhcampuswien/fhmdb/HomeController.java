@@ -96,14 +96,14 @@ public class HomeController implements Initializable {
     }
 
     public void fillListWithWatchlist() throws SQLException {
-        List<WatchListMovieEntity> watchListIds = watchListRepository.getWatchList();
-        Set<String> watchlistApiIds = watchListIds.stream()
+        List<WatchListMovieEntity> watchListIds = watchListRepository.getWatchList(); //alle watchlist Movies-Entitys holen
+        Set<String> watchlistApiIds = watchListIds.stream() //stream alle IP -IDs holen und speichern in Liste
                 .map(WatchListMovieEntity::getApiId)
                 .collect(Collectors.toSet());
 
         List<Movie> watchlistedMovies = allMovies.stream()
                 .filter(movie -> watchlistApiIds.contains(movie.getId()))
-                .toList();
+                .toList(); //alle filme mit der ID holen
         observableMovies.setAll(watchlistedMovies);
 
     }
@@ -137,23 +137,6 @@ public class HomeController implements Initializable {
             allMovies = new ArrayList<>(initList);
         observableMovies.setAll(allMovies);
 
-/*
-        ClickEventHandler<Movie> watchlistBtnClicked = (Movie movie) -> {
-            System.out.println("hmm:" + showingWatchlist);
-
-            try {
-                int result = watchListRepository.addToWatchList(movie.getId());
-                if (result == 1) {
-                    System.out.println("Added to Watchlist: " + movie.getTitle());
-                } else {
-                    System.out.println("Already in Watchlist: " + movie.getTitle());
-                }
-            } catch (Exception e) {
-                showError("DB Error", "Could not add movie to watchlist", e);
-            }
-        };
-
- */
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
@@ -282,27 +265,11 @@ public class HomeController implements Initializable {
         Stream.of(genreComboBox, releaseYearComboBox, ratingComboBox)
                 .forEach(cb -> cb.getSelectionModel().clearSelection());
     }
-        /*searchField.clear();  // Suchfeld leeren
-        Stream.of(genreComboBox, releaseYearComboBox, ratingComboBox)
-                .forEach( comboBox ->comboBox.getSelectionModel().clearSelection());  // Genre-Filter zurücksetzen
-        try
-        {
-            observableMovies.setAll(allMovies);  // Komplette Film-Liste wiederherstellen
-        }
-        catch (IOException e)
-        {
-            showError("IOError", "Fehler beim Laden der Filme", e);
-        }
-        catch (MovieAPIException e)
-        {
-            showError("MovieAPI Error", "Fehler beim Laden der Filme", e);
-        }
-    }*/
+
 
     public ObservableList<Movie> getObservableMovies() {
         return observableMovies;
     }
-
 
 
     public void showError(String title, String message, Exception e) {
@@ -335,7 +302,6 @@ public class HomeController implements Initializable {
         releaseYearComboBox.getItems().setAll(getYears());
     }
 
-
     public void removeFromWatchlist(Movie movie){
         try {
             // Entferne den Film aus der Watchlist, indem die Movie-ID verwendet wird
@@ -347,6 +313,7 @@ public class HomeController implements Initializable {
         }
     }
 
+    //Svetlanas Funktion zum movies in Watchlist hinzufügen
     public void addToWatchlist(Movie movie)
     {
         try {
@@ -366,6 +333,8 @@ public class HomeController implements Initializable {
         // Create a new Stage (window) for showing movie details
         Stage detailsStage = new Stage();
         detailsStage.setTitle("Movie Details");
+        //detailsStage.setMinHeight(2000);
+        detailsStage.setHeight(600);
 
         // Create a VBox layout to display the movie details
         VBox detailsLayout = new VBox(15);
@@ -375,13 +344,43 @@ public class HomeController implements Initializable {
         Label titleLabel = new Label("Title: " + movie.getTitle());
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #FFD700;");
 
+        String labelStyle = "-fx-font-size: 14px; -fx-text-fill: #FFFFFF;";
+
         // Create and style the description label
         Label descriptionLabel = new Label("Description: " + (movie.getDescription() != null ? movie.getDescription() : "No description available"));
-        descriptionLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #FFFFFF;");
+        descriptionLabel.setStyle(labelStyle);
 
         // Create and style the genres label
         Label genresLabel = new Label("Genres: " + movie.getGenresString());
-        genresLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #FFFFFF;");
+        genresLabel.setStyle(labelStyle);
+
+        // Create and style the ReleaseYear label
+        Label releaseYearLabel = new Label("Release Year: " + movie.getReleaseYear());
+        releaseYearLabel.setStyle(labelStyle);
+
+        // Create and style the lengthInMinutes label
+        Label lengthInMinutesLabel = new Label("lengthInMinutes: " + movie.getLengthInMinutes());
+        lengthInMinutesLabel.setStyle(labelStyle);
+
+        /* Ist zurzeit nicht implementiert in DB
+        // Create and style the directors label
+        Label directorsLabel = new Label("Directors: " + String.join(", ",movie.getDirectors()));
+        directorsLabel.setStyle(labelStyle);
+
+
+        // Create and style the writers label
+        Label writersLabel = new Label("Directors: " + movie.getWriters());
+        writersLabel.setStyle(labelStyle);
+
+        // Create and style the mainCast label
+        Label mainCastLabel = new Label("mainCast: " + movie.getMainCast());
+        mainCastLabel.setStyle(labelStyle);
+        */
+
+        // Create and style the rating label
+        Label ratingLabel = new Label("rating: " + movie.getRating());
+        ratingLabel.setStyle(labelStyle);
+
 
         // Add the movie image (if available)
         String imgUrl = movie.getImgUrl();
@@ -394,7 +393,7 @@ public class HomeController implements Initializable {
 
 
         // Add all the components to the layout
-        detailsLayout.getChildren().addAll(imageView, titleLabel, descriptionLabel, genresLabel);
+        detailsLayout.getChildren().addAll(imageView, titleLabel, descriptionLabel, genresLabel,releaseYearLabel, lengthInMinutesLabel/*, directorsLabel, writersLabel,mainCastLabel*/,ratingLabel);
 
         // Create and set the Scene for the details window
         Scene detailsScene = new Scene(detailsLayout, 400, 500);  // Adjust the size as needed

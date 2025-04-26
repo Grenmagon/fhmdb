@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
-@DatabaseTable(tableName = "movie")
+@DatabaseTable(tableName = "movie")// Tabelle erzeugen
 public class MovieEntity
 {
+    //Databasefield= Spalte in Tabelle
     @DatabaseField(generatedId = true)
     private long id;
     @DatabaseField(canBeNull = false, unique = true)
@@ -32,7 +33,7 @@ public class MovieEntity
 
     public MovieEntity()
     {}
-
+    //Konstruktor
     public MovieEntity(String apiId, String title, String description, String genres, int releaseYear, String imgUrl, int lengthInMinutes, double rating)
     {
         this.apiId = apiId;
@@ -135,12 +136,12 @@ public class MovieEntity
         this.rating = rating;
     }
 
-    public static MovieEntity fromMovie(Movie movie)
+    public static MovieEntity fromMovie(Movie movie) //movie mitgeben in Movie Entity umwandeln
     {
         return new MovieEntity(movie.getId(), movie.getTitle(), movie.getDescription(), genresToString(movie.getGenres()), movie.getReleaseYear(), movie.getImgUrl(), movie.getLengthInMinutes(), movie.getRating());
     }
 
-    public static Movie toMovie(MovieEntity entity)
+    public static Movie toMovie(MovieEntity entity) //MovieEntity in Movie umwandeln
     {
         List<Movie.Genre> genreList = new ArrayList<>();
         if (entity.genres != null) {
@@ -157,7 +158,7 @@ public class MovieEntity
         return movie;
     }
 
-    public static List<MovieEntity> fromMovies(List<Movie> movies)
+    public static List<MovieEntity> fromMovies(List<Movie> movies) //Liste von Movies wird in movie-EntityListe umgewandelt
     {
         List<MovieEntity> entities = new ArrayList<>();
         for (Movie movie: movies)
@@ -165,7 +166,7 @@ public class MovieEntity
         return entities;
     }
 
-    public static List<Movie> toMovies(List<MovieEntity> movieEntities)
+    public static List<Movie> toMovies(List<MovieEntity> movieEntities)//Movies-EntityListe  wird in movieListe umgewandelt
     {
         List<Movie> movies = new ArrayList<>();
         for (MovieEntity entity: movieEntities)

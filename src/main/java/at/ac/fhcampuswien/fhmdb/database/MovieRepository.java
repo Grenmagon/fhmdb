@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+//mit Datenbank reden
 public class MovieRepository
 {
     Dao<MovieEntity, Long> dao;
@@ -15,14 +16,14 @@ public class MovieRepository
     {
         this.dao = Database.getMovieEntitiesDao();
     }
-
+    //movie hinzufügen--> in Movie entity vorher umwandeln und ID hinzufügen
     public void addToDB(Movie movie) throws SQLException
     {
         MovieEntity movieEntity = MovieEntity.fromMovie(movie);
         movieEntity.setId(findMovieInDbOrNew(movie).getId());
         dao.createOrUpdate(movieEntity);
     }
-
+    //Movie über ID finden und entfernen
     public void removeFromDB(Movie movie) throws SQLException
     {
         MovieEntity movieEntity = findMovieInDbOrNew(movie);
@@ -30,6 +31,7 @@ public class MovieRepository
             dao.delete(movieEntity);
     }
 
+    //Movie in DB finden
     private MovieEntity findMovieInDbOrNew(Movie movie) throws SQLException
     {
         MovieEntity entity;

@@ -5,7 +5,7 @@ import org.h2.tools.Server;
 
 public class DatabaseConsole {
     private static Server webServer;
-
+    //auf Datenbank zugreifen, über Browser
     public static void startConsole() {
         try {
             webServer = Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082");
