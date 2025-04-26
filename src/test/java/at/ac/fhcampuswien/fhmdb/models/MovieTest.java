@@ -1,19 +1,49 @@
 // commit
 package at.ac.fhcampuswien.fhmdb.models;
 
+import at.ac.fhcampuswien.fhmdb.database.MovieEntity;
+import at.ac.fhcampuswien.fhmdb.database.MovieRepository;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class MovieTest
 {
 
-
+    private static final String JSON = "[\n" +
+            "{\n" +
+            "    \"id\": \"81d317b0-29e5-4846-97a6-43c07f3edf4a\",\n" +
+            "    \"title\": \"The Godfather\",\n" +
+            "    \"genres\": [\n" +
+            "      \"DRAMA\"\n" +
+            "    ],\n" +
+            "    \"releaseYear\": 1972,\n" +
+            "    \"description\": \"The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.\",\n" +
+            "    \"imgUrl\": \"https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@.V1.jpg\",\n" +
+            "    \"lengthInMinutes\": 175,\n" +
+            "    \"directors\": [\n" +
+            "      \"Francis Ford Coppola\"\n" +
+            "    ],\n" +
+            "    \"writers\": [\n" +
+            "      \"Mario Puzo\",\n" +
+            "      \"Francis Ford Coppola\"\n" +
+            "    ],\n" +
+            "    \"mainCast\": [\n" +
+            "      \"Marlon Brando\",\n" +
+            "      \"Al Pacino\",\n" +
+            "      \"James Caan\"\n" +
+            "    ],\n" +
+            "    \"rating\": 9.2\n" +
+            "  }\n" +
+            "]";
     @Test
     void compareTo_Bigger()
     {
@@ -106,33 +136,8 @@ class MovieTest
     @Test
     void getMoviesFromJson() {
         // JSON nachbauen,simulieren
-        String json = "[\n" +
-                "{\n" +
-                "    \"id\": \"81d317b0-29e5-4846-97a6-43c07f3edf4a\",\n" +
-                "    \"title\": \"The Godfather\",\n" +
-                "    \"genres\": [\n" +
-                "      \"DRAMA\"\n" +
-                "    ],\n" +
-                "    \"releaseYear\": 1972,\n" +
-                "    \"description\": \"The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.\",\n" +
-                "    \"imgUrl\": \"https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@.V1.jpg\",\n" +
-                "    \"lengthInMinutes\": 175,\n" +
-                "    \"directors\": [\n" +
-                "      \"Francis Ford Coppola\"\n" +
-                "    ],\n" +
-                "    \"writers\": [\n" +
-                "      \"Mario Puzo\",\n" +
-                "      \"Francis Ford Coppola\"\n" +
-                "    ],\n" +
-                "    \"mainCast\": [\n" +
-                "      \"Marlon Brando\",\n" +
-                "      \"Al Pacino\",\n" +
-                "      \"James Caan\"\n" +
-                "    ],\n" +
-                "    \"rating\": 9.2\n" +
-                "  }\n" +
-                "]";
-        List<Movie> actual = Movie.getMoviesFromJson(json);
+
+        List<Movie> actual = Movie.getMoviesFromJson(JSON);
         Movie m = new Movie("The Godfather", "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.", List.of(Movie.Genre.DRAMA));
         m.setReleaseYear(1972);
         m.setLengthInMinutes(175);
@@ -155,5 +160,83 @@ class MovieTest
         assertEquals(m.getMainCast(), actual.get(0).getMainCast());
         assertEquals(m.getRating(), actual.get(0).getRating());
     }
+
+
+    /* new Tests Kathi for Exercise three*/
+
+    //private static final String SAMPLE_JSON = "[{\"title\":\"Test Movie\",\"description\":\"Test Description\",\"genres\":[\"Action\"]}]";
+
+    //Test a normal valid JSON → Should return a list with expected data.
+    @Test
+    void testGetMoviesFromJson_validJson_returnsMovieList() {
+        List<Movie> movies = Movie.getMoviesFromJson(JSON);
+
+        assertNotNull(movies);
+        assertEquals(1, movies.size());
+        assertEquals("The Godfather", movies.get(0).getTitle());
+        assertEquals("The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.", movies.get(0).getDescription());
+        assertTrue(movies.get(0).getGenres().contains(Movie.Genre.DRAMA));
+    }
+//Test MovieAPI.ERROR → Should return null.
+    @Test
+    void testGetMoviesFromJson_errorString_returnsNull() {
+        List<Movie> movies = Movie.getMoviesFromJson(MovieAPI.ERROR);
+
+        assertNull(movies);
+    }
+/*
+//Mock MovieAPI.getMoviesFilter to return a fake JSON.
+    @Test
+    void testAllMoviesAPI_returnsMovies() throws IOException, MovieAPIException {
+        // Mock the MovieAPI
+        MovieAPI movieApiMock = mock(MovieAPI.class);
+        when(MovieAPI.getMoviesFilter(null, null, 0, 0)).thenReturn(JSON);
+
+        List<Movie> movies = Movie.allMoviesAPI();
+
+        assertNotNull(movies);
+        assertEquals(1, movies.size());
+        assertEquals("Test Movie", movies.get(0).getTitle());
+    }
+
+//test what happens if it throws MovieAPIException.
+    @Test
+    void testAllMoviesAPI_throwsMovieAPIException() {
+        assertThrows(MovieAPIException.class, () -> {
+            when(MovieAPI.getMoviesFilter(null, null, 0, 0)).thenThrow(new MovieAPIException("API error"));
+            Movie.allMoviesAPI();
+        });
+    }
+*/
+    //Normally you'd want to inject MovieRepository, but instantiated directly ->> simulate it by overriding it
+    @Test
+    void testGetMoviesFromDB_returnsMovies() throws SQLException {
+        // Mock MovieRepository
+        MovieRepository movieRepositoryMock = mock(MovieRepository.class);
+
+        MovieEntity entity = new MovieEntity();
+        entity.setTitle("Test Movie");
+
+        when(movieRepositoryMock.getAllMovies()).thenReturn(List.of(entity));
+
+        // "Inject" the mock manually (because getMoviesFromDB creates a new instance inside)
+        MovieRepository realRepo = new MovieRepository() {
+            @Override
+            public List<MovieEntity> getAllMovies() {
+                return List.of(entity);
+            }
+        };
+
+        // Test manually because we can't inject easily without refactoring
+        List<Movie> movies = new ArrayList<>();
+        for (MovieEntity e : realRepo.getAllMovies()) {
+            movies.add(MovieEntity.toMovie(e));
+        }
+
+        assertNotNull(movies);
+        assertEquals(1, movies.size());
+        assertEquals("Test Movie", movies.get(0).getTitle());
+    }
+
 
 }

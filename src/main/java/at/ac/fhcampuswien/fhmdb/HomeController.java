@@ -62,10 +62,10 @@ public class HomeController implements Initializable {
     public JFXButton fillDB;
 
     @FXML
-    private JFXButton toggleViewBtn;
+    public JFXButton toggleViewBtn;
 
     @FXML
-    private Label errorLabel;
+    public Label errorLabel;
 
 
 
@@ -76,7 +76,7 @@ public class HomeController implements Initializable {
     private List<Movie> allMovies = new ArrayList<>();
 
     @FXML
-    private void onToggleViewClicked() {
+    public void onToggleViewClicked() {
         showingWatchlist = !showingWatchlist;
 
         if (showingWatchlist) {
@@ -105,6 +105,7 @@ public class HomeController implements Initializable {
                 .filter(movie -> watchlistApiIds.contains(movie.getId()))
                 .toList();
         observableMovies.setAll(watchlistedMovies);
+
     }
 
 
@@ -311,7 +312,9 @@ public class HomeController implements Initializable {
         return observableMovies;
     }
 
-    public static void showError(String title, String message, Exception e) {
+
+
+    public void showError(String title, String message, Exception e) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(message);
@@ -325,7 +328,7 @@ public class HomeController implements Initializable {
         errorLabel.setVisible(true);
     }
 
-    private void refillMovieDb() {
+    public void refillMovieDb() {
         try {
             Movie.loadFromApiToDB();
             List<Movie> fresh = Movie.getMoviesFromDB();
@@ -356,7 +359,7 @@ public class HomeController implements Initializable {
     public void addToWatchlist(Movie movie)
     {
         try {
-            WatchListRepository watchListRepository = new WatchListRepository();
+            //watchListRepository = new WatchListRepository();
             int result = watchListRepository.addToWatchList(movie.getId());
             if (result == 1) {
                 showSuccessMessage("Added to Watchlist: " + movie.getTitle());
@@ -410,4 +413,19 @@ public class HomeController implements Initializable {
         detailsStage.show();
     }
 
+    public List<Movie> getAllMovies() {
+        return allMovies;
+    }
+
+    public void setAllMovies(List<Movie> allMovies) {
+        this.allMovies = allMovies;
+    }
+
+    public WatchListRepository getWatchListRepository() {
+        return watchListRepository;
+    }
+
+    public void setWatchListRepository(WatchListRepository watchListRepository) {
+        this.watchListRepository = watchListRepository;
+    }
 }

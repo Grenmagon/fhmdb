@@ -143,9 +143,10 @@ public class MovieEntity
     public static Movie toMovie(MovieEntity entity)
     {
         List<Movie.Genre> genreList = new ArrayList<>();
-        for(String genreString: entity.genres.split(","))
-        {
-            genreList.add(Movie.Genre.valueOf(genreString));
+        if (entity.genres != null) {
+            for (String genreString : entity.genres.split(",")) {
+                genreList.add(Movie.Genre.valueOf(genreString));
+            }
         }
         Movie movie = new Movie(entity.title, entity.description, genreList);
         movie.setId(entity.apiId);

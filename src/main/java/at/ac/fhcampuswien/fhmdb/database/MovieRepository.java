@@ -56,21 +56,6 @@ public class MovieRepository
         return dao.create(MovieEntity.fromMovies(movies));
     }
 
-    //TODO beibehalten????
-    public List<Movie> getMoviesFromWatchlist() throws SQLException {
-        WatchListRepository watchListRepository = new WatchListRepository();
-
-        List<WatchListMovieEntity> watchList = watchListRepository.getWatchList();
-        List<String> apiIds = new ArrayList<>();
-        for(WatchListMovieEntity watchListMovieEntity: watchList)
-            apiIds.add(watchListMovieEntity.getApiId());
-
-        if (apiIds.isEmpty())
-            return new ArrayList<>();
-
-         return MovieEntity.toMovies( dao.queryBuilder().where().in("apiId", apiIds).query());
-
-    }
 
 
 }
