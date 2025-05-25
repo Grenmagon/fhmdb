@@ -7,6 +7,10 @@ import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.models.MovieAPIException;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
+import at.ac.fhcampuswien.fhmdb.ui.sort.AscendingState;
+import at.ac.fhcampuswien.fhmdb.ui.sort.DescendingState;
+import at.ac.fhcampuswien.fhmdb.ui.sort.NotSortedState;
+import at.ac.fhcampuswien.fhmdb.ui.sort.SortContext;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
@@ -22,7 +26,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
-
 
 
 import java.io.IOException;
@@ -66,7 +69,6 @@ public class HomeController implements Initializable {
 
     @FXML
     public Label errorLabel;
-
 
 
     public boolean showingWatchlist = false;
@@ -115,6 +117,12 @@ public class HomeController implements Initializable {
 
     private ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
+    private SortContext sortContext = new SortContext();
+
+    private void refreshView() {
+        observableMovies.setAll(sortContext.sort(allMovies));
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -135,7 +143,7 @@ public class HomeController implements Initializable {
 
         if (initList != null)
             allMovies = new ArrayList<>(initList);
-        observableMovies.setAll(allMovies);
+        refreshView();
 
 
         // initialize UI stuff
@@ -167,28 +175,33 @@ public class HomeController implements Initializable {
             // DONE sort observableMovies ascending
             if (sortBtn.getText().equals("Sort (asc)")) {
                 // Done
-                sortDesc();
+                sortContext.setState( new AscendingState());
                 sortBtn.setText("Sort (desc)");
             } else {
                 // DONE sort observableMovies descending
-                sortAsc();
+                sortContext.setState( new DescendingState());
                 sortBtn.setText("Sort (asc)");
             }
+            refreshView();
         });
 
-        resetBtn.setOnAction(actionEvent -> onResetClicked());
+        resetBtn.setOnAction(actionEvent -> {sortContext.setState(new NotSortedState());
+            sortBtn.setText("Sort (asc)");
+            refreshView();
+        });
+
 
         fillDB.setOnAction(actionEvent -> refillMovieDb());
+
     }
 
+    // public void sortAsc() {
+    //    observableMovies.sort(null);
+    // }
 
-    public void sortAsc() {
-        observableMovies.sort(null);
-    }
-
-    public void sortDesc() {
-        observableMovies.sort(Collections.reverseOrder());
-    }
+    // public void sortDesc() {
+    // observableMovies.sort(Collections.reverseOrder());
+    // }
 
     public String[] getYears() {
         return observableMovies.stream().map(movie -> String.valueOf(movie.getReleaseYear())).distinct().sorted().toArray(String[]::new);
@@ -220,8 +233,7 @@ public class HomeController implements Initializable {
         List<Movie> toFilter = new ArrayList<>();
         if (!showingWatchlist)
             toFilter = new ArrayList<>(allMovies);
-        else
-        {
+        else {
             try {
                 fillListWithWatchlist();
                 toFilter = new ArrayList<>(observableMovies);
@@ -302,7 +314,7 @@ public class HomeController implements Initializable {
         releaseYearComboBox.getItems().setAll(getYears());
     }
 
-    public void removeFromWatchlist(Movie movie){
+    public void removeFromWatchlist(Movie movie) {
         try {
             // Entferne den Film aus der Watchlist, indem die Movie-ID verwendet wird
             watchListRepository.removeFromWatchList(movie.getId());
@@ -314,8 +326,7 @@ public class HomeController implements Initializable {
     }
 
     //Svetlanas Funktion zum movies in Watchlist hinzufügen
-    public void addToWatchlist(Movie movie)
-    {
+    public void addToWatchlist(Movie movie) {
         try {
             //watchListRepository = new WatchListRepository();
             int result = watchListRepository.addToWatchList(movie.getId());
@@ -393,7 +404,7 @@ public class HomeController implements Initializable {
 
 
         // Add all the components to the layout
-        detailsLayout.getChildren().addAll(imageView, titleLabel, descriptionLabel, genresLabel,releaseYearLabel, lengthInMinutesLabel/*, directorsLabel, writersLabel,mainCastLabel*/,ratingLabel);
+        detailsLayout.getChildren().addAll(imageView, titleLabel, descriptionLabel, genresLabel, releaseYearLabel, lengthInMinutesLabel/*, directorsLabel, writersLabel,mainCastLabel*/, ratingLabel);
 
         // Create and set the Scene for the details window
         Scene detailsScene = new Scene(detailsLayout, 400, 500);  // Adjust the size as needed
@@ -419,3 +430,5 @@ public class HomeController implements Initializable {
         this.watchListRepository = watchListRepository;
     }
 }
+
+
