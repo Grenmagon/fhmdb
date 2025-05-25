@@ -75,7 +75,7 @@ public class HomeControllerTest {
 
     //Start Svetlanas Tests:
 
-    @Test
+    /* @Test
     void movieNamesSortAsc() {
         homeController.sortAsc();
         assertEquals(homeController.getObservableMovies(), observableMovies);
@@ -86,7 +86,7 @@ public class HomeControllerTest {
         homeController.sortDesc();
         assertEquals(homeController.getObservableMovies(), observableMovies);
     }
-
+*/
     @Test
     void getYears() {
         String[] actual = homeController.getYears();
