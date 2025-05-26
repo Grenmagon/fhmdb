@@ -186,6 +186,7 @@ class MovieTest
     //Normally you'd want to inject MovieRepository, but instantiated directly ->> simulate it by overriding it
     @Test
     void testGetMoviesFromDB_returnsMovies() throws SQLException {
+        /*
         // Mock MovieRepository
         MovieRepository movieRepositoryMock = mock(MovieRepository.class);
 
@@ -211,6 +212,27 @@ class MovieTest
         assertNotNull(movies);
         assertEquals(1, movies.size());
         assertEquals("Test Movie", movies.get(0).getTitle());
+         */
+        MovieRepository testRepo = mock(MovieRepository.class);
+        MovieEntity entity = new MovieEntity();
+        entity.setTitle("Test Movie");
+
+        when(testRepo.getAllMovies()).thenReturn(List.of(entity));
+
+// Testinstanz setzen
+        MovieRepository.setTestInstance(testRepo);
+
+// Nun: Zugriff über Singleton wie gewohnt
+        List<Movie> movies = new ArrayList<>();
+        for (MovieEntity e : MovieRepository.getInstance().getAllMovies()) {
+            movies.add(MovieEntity.toMovie(e));
+        }
+
+        assertNotNull(movies);
+        assertEquals(1, movies.size());
+        assertEquals("Test Movie", movies.get(0).getTitle());
+
+
     }
 
 

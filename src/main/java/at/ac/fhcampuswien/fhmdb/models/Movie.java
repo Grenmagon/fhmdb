@@ -1,11 +1,9 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
-import at.ac.fhcampuswien.fhmdb.database.Database;
 import at.ac.fhcampuswien.fhmdb.database.MovieEntity;
 import at.ac.fhcampuswien.fhmdb.database.MovieRepository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.j256.ormlite.dao.Dao;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -237,7 +235,7 @@ public class Movie implements Comparable<Movie>{
     }
 
     public static List<Movie> getMoviesFromDB() throws SQLException {
-        MovieRepository mr = new MovieRepository();
+        MovieRepository mr = MovieRepository.getInstance();
         // Fetch all movies as MovieEntities, then convert to Movie
         List<MovieEntity> movieEntities = mr.getAllMovies();
         List<Movie> movies = new ArrayList<>();
@@ -250,7 +248,7 @@ public class Movie implements Comparable<Movie>{
     }
 
     public static void loadFromApiToDB() throws SQLException, IOException, MovieAPIException {
-        MovieRepository mr = new MovieRepository();
+        MovieRepository mr = MovieRepository.getInstance();
         mr.removeAll();
         mr.addAllMovies(allMoviesAPI());
     }

@@ -4,7 +4,6 @@ import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 //mit Datenbank reden
@@ -12,10 +11,24 @@ public class MovieRepository
 {
     Dao<MovieEntity, Long> dao;
 
-    public MovieRepository() throws SQLException
+    private static  MovieRepository instance;
+    private MovieRepository() throws SQLException
     {
         this.dao = Database.getMovieEntitiesDao();
     }
+
+    public static MovieRepository getInstance() throws SQLException
+    {
+        if (instance == null)
+            instance = new MovieRepository();
+        return instance;
+    }
+
+    public static void setTestInstance(MovieRepository testInstance) {
+        instance = testInstance;
+    }
+
+
     //movie hinzufügen--> in Movie entity vorher umwandeln und ID hinzufügen
     public void addToDB(Movie movie) throws SQLException
     {

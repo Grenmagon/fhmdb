@@ -74,7 +74,7 @@ public class HomeController implements Initializable {
     public boolean showingWatchlist = false;
 
     private WatchListRepository watchListRepository;
-    private MovieRepository movieRepository;
+    //private MovieRepository movieRepository;
     private List<Movie> allMovies = new ArrayList<>();
 
     @FXML
@@ -127,8 +127,8 @@ public class HomeController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         try {
-            watchListRepository = new WatchListRepository(/*Database.getWatchListDao()*/);
-            movieRepository = new MovieRepository();
+            watchListRepository = WatchListRepository.getInstance();
+            //movieRepository = new MovieRepository();
         } catch (SQLException e) {
             showError("DB Error", "Failed to initialize WatchListRepository", e);
         }

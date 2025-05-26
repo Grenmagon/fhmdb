@@ -8,9 +8,17 @@ import java.util.List;
 public class WatchListRepository {
     Dao<WatchListMovieEntity, Long> dao;
 
-    public WatchListRepository(/*Dao<WatchListMovieEntity, Long> dao*/) throws SQLException {
+    private static WatchListRepository instance;
+    private WatchListRepository(/*Dao<WatchListMovieEntity, Long> dao*/) throws SQLException {
 
         this.dao = Database.getWatchListDao();
+    }
+
+    public static WatchListRepository getInstance() throws SQLException
+    {
+        if (instance == null)
+            instance = new WatchListRepository();
+        return instance;
     }
 
     public List<WatchListMovieEntity> getWatchList() throws SQLException{

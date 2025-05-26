@@ -30,7 +30,7 @@ public class MovieRepositoryTest {
 
     @BeforeEach
     public void setUp() throws SQLException {
-        movieRepository = new MovieRepository();
+        movieRepository = MovieRepository.getInstance();
         movieRepository.removeAll(); // leere DB vor jedem Test
     }
 
