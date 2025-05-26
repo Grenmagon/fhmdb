@@ -11,6 +11,7 @@ import at.ac.fhcampuswien.fhmdb.ui.sort.AscendingState;
 import at.ac.fhcampuswien.fhmdb.ui.sort.DescendingState;
 import at.ac.fhcampuswien.fhmdb.ui.sort.NotSortedState;
 import at.ac.fhcampuswien.fhmdb.ui.sort.SortContext;
+import at.ac.fhcampuswien.fhmdb.utils.Observer;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
@@ -36,7 +37,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class HomeController implements Initializable {
+public class HomeController implements Initializable, Observer {
     @FXML
     public JFXButton searchBtn;
 
@@ -67,8 +68,8 @@ public class HomeController implements Initializable {
     @FXML
     public JFXButton toggleViewBtn;
 
-    @FXML
-    public Label errorLabel;
+    //@FXML
+    //public Label errorLabel;
 
 
     public boolean showingWatchlist = false;
@@ -128,10 +129,11 @@ public class HomeController implements Initializable {
 
         try {
             watchListRepository = WatchListRepository.getInstance();
-            //movieRepository = new MovieRepository();
         } catch (SQLException e) {
             showError("DB Error", "Failed to initialize WatchListRepository", e);
         }
+        watchListRepository.subscribe(this);
+
         List<Movie> initList = null;
         //= Movie.allMoviesAPI();
         try {
@@ -292,11 +294,15 @@ public class HomeController implements Initializable {
         alert.showAndWait();
     }
 
+/*
     public void showSuccessMessage(String message) {
         errorLabel.setText(message);
         errorLabel.setStyle("-fx-text-fill: green;");
         errorLabel.setVisible(true);
+
     }
+ */
+
 
     public void refillMovieDb() {
         try {
@@ -319,7 +325,7 @@ public class HomeController implements Initializable {
             // Entferne den Film aus der Watchlist, indem die Movie-ID verwendet wird
             watchListRepository.removeFromWatchList(movie.getId());
             fillListWithWatchlist();
-            showSuccessMessage("Film removed from Watchlist: " + movie.getTitle());
+            //showSuccessMessage("Film removed from Watchlist: " + movie.getTitle());
         } catch (Exception e) {
             showError("DB Error", "Could not remove movie from watchlist", e);
         }
@@ -329,12 +335,14 @@ public class HomeController implements Initializable {
     public void addToWatchlist(Movie movie) {
         try {
             //watchListRepository = new WatchListRepository();
-            int result = watchListRepository.addToWatchList(movie.getId());
+            watchListRepository.addToWatchList(movie.getId());
+            /*
             if (result == 1) {
                 showSuccessMessage("Added to Watchlist: " + movie.getTitle());
             } else {
                 showSuccessMessage("Already in Watchlist: " + movie.getTitle());
             }
+             */
         } catch (Exception e) {
             showError("DB Error", "Could not add movie to watchlist", e);
         }
@@ -428,6 +436,15 @@ public class HomeController implements Initializable {
 
     public void setWatchListRepository(WatchListRepository watchListRepository) {
         this.watchListRepository = watchListRepository;
+    }
+
+    @Override
+    public void writeAlert(String title, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
 

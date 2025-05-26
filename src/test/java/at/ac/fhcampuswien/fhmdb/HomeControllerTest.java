@@ -241,7 +241,7 @@ public class HomeControllerTest {
 
 
         doNothing().when(controller).fillListWithWatchlist();
-        doNothing().when(controller).showSuccessMessage(anyString());
+        //doNothing().when(controller).showSuccessMessage(anyString());
 
         // Act
         controller.removeFromWatchlist(testMovie);
@@ -264,9 +264,10 @@ public class HomeControllerTest {
         WatchListRepository mockRepository = mock(WatchListRepository.class);
         controller.setWatchListRepository( mockRepository);
 
-        when(mockRepository.addToWatchList(anyString())).thenReturn(1);
+        //when(mockRepository.addToWatchList(anyString())).thenReturn();
+        doNothing().when(mockRepository).addToWatchList(anyString());
 
-        doNothing().when(controller).showSuccessMessage(anyString());
+        //doNothing().when(controller).showSuccessMessage(anyString());
         doNothing().when(controller).showError(anyString(),anyString(),any());
 
         // Act
