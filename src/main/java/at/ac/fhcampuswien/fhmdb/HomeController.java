@@ -172,6 +172,15 @@ public class HomeController implements Initializable, Observer {
         ));
 
 
+        sortBtn.setText(sortContext.getText());
+
+        sortBtn.setOnAction(actionEvent -> {
+            sortContext.getNextState();
+            sortBtn.setText(sortContext.getText());
+            refreshView();
+        });
+
+        /*
         // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
             // DONE sort observableMovies ascending
@@ -186,9 +195,9 @@ public class HomeController implements Initializable, Observer {
             }
             refreshView();
         });
+         */
 
-        resetBtn.setOnAction(actionEvent -> {sortContext.setState(new NotSortedState());
-            sortBtn.setText("Sort (asc)");
+        resetBtn.setOnAction(actionEvent -> {
             refreshView();
         });
 

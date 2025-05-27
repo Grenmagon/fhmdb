@@ -12,4 +12,16 @@ public class DescendingState implements SortState {
                 .sorted(Comparator.comparing(Movie::getTitle, String.CASE_INSENSITIVE_ORDER).reversed())
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public SortState getNext()
+    {
+        return new AscendingState();
+    }
+
+    @Override
+    public String getText()
+    {
+        return "Sort (desc)";
+    }
 }

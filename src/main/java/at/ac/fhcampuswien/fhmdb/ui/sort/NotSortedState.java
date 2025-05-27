@@ -7,6 +7,18 @@ public class NotSortedState implements SortState {
     public List<Movie> sort(List<Movie> movies) {
         return List.copyOf(movies);
 }
+
+    @Override
+    public SortState getNext()
+    {
+        return new AscendingState();
+    }
+
+    @Override
+    public String getText()
+    {
+        return "Sort ()";
+    }
 }
 
 
